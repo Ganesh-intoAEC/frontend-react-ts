@@ -1,0 +1,44 @@
+$primaryColor: #109CF1;
+$primaryLightColor: #2396C1;
+$primaryDarkColor: #035775;
+$black: #000000;
+$greyColor: #3E3E3E;
+$graycolor-2:#B5B3B3;
+$light-gray:#707070;
+$textLightColor: #ffffff;
+$primaryShadow: 0px 0px 10px #9191914D;
+$secondaryShadow: 0px 0px 6px #00000029;
+$borderBottom: 1px solid #D1D1D1;
+$redColor:#FF2626;
+$grid-columns: 12;
+$light-skyblue:#2396C11A;
+$light-green:#F3FFF5;
+$skyblue:#227391;
+$green:#008600; 
+$success: #05AA41;
+$borderBottomDashed: 1px dashed #D1D1D1;
+$Border:#D1D1D1;
+$BorderPuprle: #6F63FE;
+$BgLightPurple: #FCFCFF;
+$BorderWhite: #d1d1d17a;
+$LblDangerTextColor: #FF0909;
+$LblDangerBgColor: #FDEFEF;
+$LblSuccessTextColor: #25CA97;
+$LblSuccessBgColor: #E7F9F0;
+$RedBgColor: #f26d7d;
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px,
+);

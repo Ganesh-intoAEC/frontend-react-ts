@@ -1,25 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Box from "@mui/material/Box";
+import MiniDrawer  from "./app/components/sidebar/sidebarComponent";
+import CssBaseline from "@mui/material/CssBaseline";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Dashboard from "../src/app/pages/dashboard/pages/dashboard";
+import CreateLeads from "./app/pages/leads/pages/createLead/createLeadInitial";
+import './assets/css/style.css'
+import CreateLeadForm from "./app/pages/leads/pages/createLead/createLeadMultistepForm";
+
+import MasterGridNavigation from "./app/pages/leads/pages/leadGridMaster/masterGridNavigation";
+import LeadProfile from "./app/pages/leads/pages/leadProfilePage/leadProfile";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router >
+      <Box sx={{ display: 'flex' ,fontFamily: 'poppins' }}>
+        <CssBaseline />
+        <MiniDrawer />
+        <Box className="container  m-0 p-0" component="main" sx={{ flexGrow: 1, p: 3 , backgroundColor:'#F5F6F8'}}>
+          <Routes>
+            <Route path=""  Component={Dashboard} />
+            <Route path="/create-lead" Component={CreateLeads} />
+            <Route path="/create-lead-form" Component={CreateLeadForm} />
+            <Route path="/filter" Component={MasterGridNavigation} />
+            <Route path="/lead-profile" Component={LeadProfile} />
+          </Routes>
+        </Box>
+      </Box>
+    </Router>
   );
 }
 

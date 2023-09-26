@@ -1,5 +1,6 @@
 import Head from "next/head";
-import Dashboard from "../app/pages/dashboard/pages/dashboard";
+import SignInCard from "./sign-in/signInForm";
+
 
 export default function Home() {
   return (
@@ -11,7 +12,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Dashboard />
+      <SignInCard/>
       </main>
     </>
   );

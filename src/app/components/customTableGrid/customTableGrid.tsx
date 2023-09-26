@@ -19,7 +19,7 @@ import RibbonIcon from "../../../assets/icons/ribbon-icon";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import CustomDatagridDropdown from "../customDropdownBtn/cutomDropdownDataGrid";
-import GridSearchExport from "../../pages/leads/pages/leadGridMaster/_gridSearchExport";
+
 import {
   Button,
   Dialog,
@@ -35,13 +35,14 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import WonIcon from "../../../assets/icons/won-icon";
 import LostIcon from "../../../assets/icons/lost-icon";
-import {dropdownOptions} from '../../constants/constant'
+import { dropdownOptions } from "../../constants/constant";
 import { useRouter } from "next/router";
+import GridSearchExport from "@/pages/leads/lead-master/_gridSearchExport";
 
 interface Row {
   id: number;
   leadName: string;
-  stage:string;
+  stage: string;
   projectType: string;
   leadSource: string;
   leadCreated: string;
@@ -52,13 +53,21 @@ type Column = keyof Row;
 function createData(
   id: number,
   leadName: string,
-  stage:string,
+  stage: string,
   projectType: string,
   leadSource: string,
   leadCreated: string,
   estimation: string
 ): Row {
-  return { id, leadName, stage, projectType, leadSource, leadCreated, estimation };
+  return {
+    id,
+    leadName,
+    stage,
+    projectType,
+    leadSource,
+    leadCreated,
+    estimation,
+  };
 }
 
 const rows: Row[] = [
@@ -112,12 +121,13 @@ const rows: Row[] = [
 export default function CustomDatagrid() {
   const [page] = React.useState(0);
   const [rowsPerPage] = React.useState(5);
-  const {push} = useRouter();
+  const { push } = useRouter();
   const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
   const [orderBy, setOrderBy] = React.useState<Column | "">("");
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
 
-  const [selectedDropdownValue, setSelectedDropdownValue] = React.useState("New"); // State to track the selected dropdown value
+  const [selectedDropdownValue, setSelectedDropdownValue] =
+    React.useState("New"); // State to track the selected dropdown value
 
   const [hoveredRow, setHoveredRow] = React.useState<number | null>(null); //hover menu track
 
@@ -468,7 +478,7 @@ export default function CustomDatagrid() {
                         <Avatar
                           alt="Remy Sharp"
                           sx={{ width: "30px", height: "30px" }}
-                          src={'images/image.png'}
+                          src={"images/image.png"}
                         />
                         <p>{"Lindsey Shroud"}</p>
                       </Stack>
@@ -512,7 +522,6 @@ export default function CustomDatagrid() {
       <div>
         <Dialog
           open={rowStageModal}
-          disableScrollLock
           onClose={rowStageModalClose}
           maxWidth={"xs"}
           sx={{ textAlign: "center" }}
@@ -528,14 +537,35 @@ export default function CustomDatagrid() {
                   <>
                     <span>{`Lead Stage as ${rowStageSelected} (`} </span>
                     <span>
-                    <Tooltip
-                      title={rowStageSelected}
-                      arrow
-                      placement="right"
-                      key={rowStageSelected}
-                    >
-                      {rowStageSelected === "Won" ? <WonIcon style={{ width: "30px", height: "30px", fill: "#2ED47A" ,transform: 'scale(1.5)',margin:' -4px 1px -8px -4px'}} /> : <LostIcon style={{ width: "30px", height: "30px", fill: "#F7685B" ,transform: 'scale(1.5)',margin:' -4px 1px -8px -4px'}}  />}
-                    </Tooltip></span>
+                      <Tooltip
+                        title={rowStageSelected}
+                        arrow
+                        placement="right"
+                        key={rowStageSelected}
+                      >
+                        {rowStageSelected === "Won" ? (
+                          <WonIcon
+                            style={{
+                              width: "30px",
+                              height: "30px",
+                              fill: "#2ED47A",
+                              transform: "scale(1.5)",
+                              margin: " -4px 1px -8px -4px",
+                            }}
+                          />
+                        ) : (
+                          <LostIcon
+                            style={{
+                              width: "30px",
+                              height: "30px",
+                              fill: "#F7685B",
+                              transform: "scale(1.5)",
+                              margin: " -4px 1px -8px -4px",
+                            }}
+                          />
+                        )}
+                      </Tooltip>
+                    </span>
                     <span>{`)`} </span>
                   </>
                 ) : (
@@ -609,19 +639,21 @@ export default function CustomDatagrid() {
               </DialogTitle>
               <Divider />
               <DialogContent>
-               {rowStageSelected === "Snooze" && (<LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    className="my-2"
-                    slotProps={{
-                      textField: {
-                        fullWidth: true,
-                        helperText: "",
-                        required: true,
-                      },
-                    }}
-                    label="Tentative start date"
-                  />
-                </LocalizationProvider>)}
+                {rowStageSelected === "Snooze" && (
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      className="my-2"
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          helperText: "",
+                          required: true,
+                        },
+                      }}
+                      label="Tentative start date"
+                    />
+                  </LocalizationProvider>
+                )}
 
                 <TextField
                   label="Description"
@@ -636,36 +668,37 @@ export default function CustomDatagrid() {
               </DialogContent>
             </>
           )}
-
-          <DialogActions className="justify-content-center mb-2">
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ width: "174px", height: "48px", background: "#109CF1" }}
-              onClick={rowStageModalClose}
-            >
-              {"No"}
-            </Button>
-            <Button
-              variant="outlined"
-              color={
-                rowStageSelected === "Won" || rowStageSelected === "Lost"
-                  ? "primary"
-                  : "error"
-              }
-              sx={{
-                width: "174px",
-                height: "48px",
-                color:
+          <div>
+            <DialogActions sx={{justifyContent:'center', marginBottom:'20px'}} >
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ width: "174px", height: "48px", background: "#109CF1" }}
+                onClick={rowStageModalClose}
+              >
+                {"No"}
+              </Button>
+              <Button
+                variant="outlined"
+                color={
                   rowStageSelected === "Won" || rowStageSelected === "Lost"
-                    ? "#109CF1"
-                    : "#FF3C5F",
-              }}
-              onClick={rowStageModalClose}
-            >
-              Yes
-            </Button>
-          </DialogActions>
+                    ? "primary"
+                    : "error"
+                }
+                sx={{
+                  width: "174px",
+                  height: "48px",
+                  color:
+                    rowStageSelected === "Won" || rowStageSelected === "Lost"
+                      ? "#109CF1"
+                      : "#FF3C5F",
+                }}
+                onClick={rowStageModalClose}
+              >
+                Yes
+              </Button>
+            </DialogActions>
+          </div>
         </Dialog>
       </div>
     </div>

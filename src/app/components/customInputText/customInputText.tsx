@@ -11,6 +11,7 @@ const CustomInputText: React.FC<CustomTextFieldProps> = ({ label, ...props }) =>
   const [isFocused, setIsFocused] = useState(false);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    event.target.value = event.target.value.replace(/[^0-9]/g, "");
     setInputValue(event.target.value);
   };
 
@@ -32,6 +33,9 @@ const CustomInputText: React.FC<CustomTextFieldProps> = ({ label, ...props }) =>
         startAdornment: (
           <InputAdornment position="start">₹</InputAdornment>
         ),
+        inputProps: {
+          pattern: "^[0-9]*$", // This pattern allows only numbers
+        },
       }}
       InputLabelProps={{
         shrink: inputValue !== '' || isFocused,

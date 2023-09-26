@@ -102,3 +102,12 @@ export const dropdownOptions = [
 
   ];
   
+  export const organiationTypes = [
+    'Architect',
+'Vendor',
+'Manufacturer',
+'Distributer',
+'Service provider',
+'Retailer',
+
+  ]

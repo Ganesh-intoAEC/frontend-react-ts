@@ -10,17 +10,17 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import Avatar from "@mui/material/Avatar";
-import Stack from "@mui/material/Stack";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import Tooltip from "@mui/material/Tooltip";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
+import { ListItemIcon, Menu, MenuItem } from "@mui/material";
+import { Logout, PersonAdd, Settings } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -85,7 +85,7 @@ const Drawer = styled(MuiDrawer, {
 export default function MiniDrawer() {
   const [open, setOpen] = React.useState(false);
   const { asPath, push } = useRouter();
-
+  const isActive = (path: string) => asPath.startsWith(path);
   // const [openSearchMaster, setOpenSearchMaster] = React.useState(false);
   // const handleClose = () => {
   //   setOpenSearchMaster(false);
@@ -102,6 +102,24 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
+  //Profile dropdown
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const profileOpen = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  //logout 
+  const handleLogout = () => {
+    // Assuming you want to set isLoggedIn to true upon login
+    const isLoggedIn = false;
+
+    // Pass isLoggedIn as a query parameter or as part of the route
+    router.push(`/sign-in?isLoggedIn=${isLoggedIn}`);
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar
@@ -112,8 +130,8 @@ export default function MiniDrawer() {
           <Box sx={{ display: "flex" }}>
             <Box sx={{ width: "180px", padding: "10px" }}>
               <img
-                src={"images/logo.png"}
-                srcSet={"images/logo.png"}
+                src={"/images/logo.png"}
+                srcSet={"/images/logo.png"}
                 style={{ width: "100%", height: "auto" }}
                 alt={"logo"}
                 loading="lazy"
@@ -140,12 +158,94 @@ export default function MiniDrawer() {
             <IconButton>
               <NotificationsNoneIcon />
             </IconButton>
-            <Stack direction="row" spacing={2}>
-              <Avatar
-                alt="Remy Sharp"
-                src="https://mui.com/static/images/avatar/1.jpg"
-              />
-            </Stack>
+           
+            <React.Fragment>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <Tooltip title="Account settings">
+                  <IconButton
+                    onClick={handleClick}
+                    size="small"
+                    sx={{ ml: 2 }}
+                    aria-controls={profileOpen ? "account-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={profileOpen ? "true" : undefined}
+                  >
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="https://mui.com/static/images/avatar/1.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+              <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={profileOpen}
+                onClose={handleClose}
+                onClick={handleClose}
+                disableScrollLock
+                PaperProps={{
+                  elevation: 0,
+                  sx: {
+                    overflow: "visible",
+                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                    mt: 1.5,
+                    "& .MuiAvatar-root": {
+                      width: 32,
+                      height: 32,
+                      ml: -0.5,
+                      mr: 1,
+                    },
+                    "&:before": {
+                      content: '""',
+                      display: "block",
+                      position: "absolute",
+                      top: 0,
+                      right: 14,
+                      width: 10,
+                      height: 10,
+                      bgcolor: "background.paper",
+                      transform: "translateY(-50%) rotate(45deg)",
+                      zIndex: 0,
+                    },
+                  },
+                }}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              >
+                <MenuItem onClick={handleClose}>
+                  <Avatar /> Profile
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <Avatar /> My account
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <PersonAdd fontSize="small" />
+                  </ListItemIcon>
+                  Add another account
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <Settings fontSize="small" />
+                  </ListItemIcon>
+                  Settings
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
+              </Menu>
+            </React.Fragment>
           </Box>
         </Box>
       </AppBar>
@@ -156,8 +256,18 @@ export default function MiniDrawer() {
 
         <List sx={{ marginTop: "80px" }}>
           {[
-            { text: "Dashboard", icon: <DashboardIcon />, to: "/" },
-            { text: "Lead", icon: <PeopleAltIcon />, to: "/create-lead" },
+            {
+              text: "Dashboard",
+              icon: <DashboardIcon />,
+              to: "/dashboard",
+              path: "/dashboard",
+            },
+            {
+              text: "Lead",
+              icon: <PeopleAltIcon />,
+              to: "/leads/create-lead",
+              path: "/leads",
+            },
           ].map((item) => (
             <Tooltip title={item.text} arrow placement="right" key={item.text}>
               <ListItemButton
@@ -166,7 +276,7 @@ export default function MiniDrawer() {
                 }}
                 style={{
                   textDecoration: "none",
-                  color: item.to === asPath ? "#3CA2FF" : "#334D6E",
+                  color: isActive(item.path) ? "#3CA2FF" : "#334D6E",
                 }}
               >
                 <ListItem disablePadding sx={{ display: "block" }}>
@@ -182,7 +292,7 @@ export default function MiniDrawer() {
                         minWidth: 0,
                         mr: open ? 3 : "auto",
                         justifyContent: "center",
-                        color: item.to === asPath ? "#3CA2FF" : "#334D6E",
+                        color: isActive(item.path) ? "#3CA2FF" : "#334D6E",
                       }}
                     >
                       {item.icon}

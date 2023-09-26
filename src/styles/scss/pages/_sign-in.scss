@@ -1,0 +1,13 @@
+.signIn-footer {
+  background: rgb(60, 162, 255);
+  color: rgb(255, 255, 255);
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 20px;
+}
+.signInUI .MuiOutlinedInput-notchedOutline,.signUpUI .MuiOutlinedInput-notchedOutline,.signInUI .MuiFormLabel-root,.signUpUI .MuiFormLabel-root, .signInUI .MuiOutlinedInput-root,.signUpUI .MuiOutlinedInput-root {
+  border-color: #131313 !important;
+  color: #131313 !important;
+  border-radius: 12px !important;
+}

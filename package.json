@@ -36,7 +36,7 @@
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.5.2",
     "@types/autosuggest-highlight": "^3.2.0",
-    "@types/react-swipeable-views": "^0.13CCC.2",
+    "@types/react-swipeable-views": "^0.13.2",
     "@types/react-swipeable-views-utils": "^0.13.4",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",

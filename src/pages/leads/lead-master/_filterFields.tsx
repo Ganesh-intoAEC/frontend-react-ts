@@ -5,33 +5,42 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import FilterIcon from "../../../assets/icons/filter-icon";
 import MultipleSelectDropdown from "../../../app/components/multiSelectDropdown/multiSelectDropdown";
-import{filterData, ProjectTypes,LeadStages,LeadSources, AvatarArr} from '../../../app/constants/constant'
+import {
+  filterData,
+  ProjectTypes,
+  LeadStages,
+  LeadSources,
+  AvatarArr,
+} from "../../../app/constants/constant";
 import SelectIconDropdown from "../../../app/components/singleSelectIconDropdown/singleSelectIconDropdown";
-
+import CustomDateRangePicker from "@/app/components/CustomDateRangePicker";
 
 const FilterFields: React.FC = () => {
   return (
     <Box
       component="form"
       sx={{
-        "& .MuiTextField-root": { width: "100%" }
+        "& .MuiTextField-root": { width: "100%" },
       }}
       noValidate
       autoComplete="off"
-      
     >
       <div className="container m-0">
         <div className="row">
           <div className="col-lg-2 col-md-6 col-sm-12 pr-2">
-       
-            <MultipleSelectDropdown label={"Project Type"} dataArr={ProjectTypes}/>
+            <MultipleSelectDropdown
+              label={"Project Type"}
+              dataArr={ProjectTypes}
+            />
           </div>
           <div className=" col-lg-2 col-md-6 col-sm-12 pr-2">
-     
-            <MultipleSelectDropdown label={"Lead Stage"} dataArr={LeadStages}/>
+            <MultipleSelectDropdown label={"Lead Stage"} dataArr={LeadStages} />
           </div>
           <div className="col-lg-2 col-md-6 col-sm-12 pr-2">
-          <MultipleSelectDropdown label={"Lead Source"} dataArr={LeadSources}/>
+            <MultipleSelectDropdown
+              label={"Lead Source"}
+              dataArr={LeadSources}
+            />
           </div>
           <div className="col-lg-2 col-md-6 col-sm-12 pr-2">
             {/* <TextField
@@ -48,10 +57,10 @@ const FilterFields: React.FC = () => {
                 </MenuItem>
               ))}
             </TextField> */}
-            <SelectIconDropdown dataArr={AvatarArr} label="Assigned to"/>
+            <SelectIconDropdown dataArr={AvatarArr} label="Assigned to" />
           </div>
           <div className=" col-lg-2 col-md-6 col-sm-12 pr-2">
-            <TextField
+            {/* <TextField
               id="standard-select-currency"
               select
               label="Lead Created On"
@@ -64,7 +73,12 @@ const FilterFields: React.FC = () => {
                   {option.assigned}
                 </MenuItem>
               ))}
-            </TextField>
+            </TextField> */}
+          <CustomDateRangePicker
+            onApply={(start, end) => {
+              console.log(start, end);
+            }}
+          />
           </div>
           <div>
             <Button
@@ -78,7 +92,7 @@ const FilterFields: React.FC = () => {
               className="mt-2"
               startIcon={
                 <FilterIcon
-                style={{ width: "20px", height: "20px", fill:'#ffffff'}}
+                  style={{ width: "20px", height: "20px", fill: "#ffffff" }}
                 />
               }
             >
@@ -89,6 +103,6 @@ const FilterFields: React.FC = () => {
       </div>
     </Box>
   );
-}
+};
 
 export default FilterFields;

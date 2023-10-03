@@ -129,6 +129,7 @@ export default function CustomDatagrid({
   const [orderBy, setOrderBy] = React.useState<Column | "">("");
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
 
+ 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   // const [data, setData] = React.useState<any | null>(null);
   // Initialize useFetch with your API base URL
@@ -256,7 +257,7 @@ export default function CustomDatagrid({
   const handleDropdownChange = (event: {
     target: { value: React.SetStateAction<string> };
   }) => {
-    setSelectedDropdownValue(event.target.value);
+    console.log(event.target.value);
   };
 
   // row selected action

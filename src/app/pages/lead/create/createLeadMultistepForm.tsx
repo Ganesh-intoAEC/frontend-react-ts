@@ -1,34 +1,34 @@
-import React, { useState } from "react";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {
+  Box,
   Button,
-  Stepper,
+  IconButton,
+  MenuItem,
   Step,
   StepLabel,
+  Stepper,
   TextField,
-  MenuItem,
-  Box,
   Typography,
-  IconButton,
 } from "@mui/material";
-import ColorlibStepIcon from "../../../components/customStepper/colorStepicon";
-import ProjectEye from "../../../../assets/icons/project-eye";
-import UsersInfo from "../../../../assets/icons/users-info";
-import SuccessTick from "../../../../assets/icons/success-tick";
-import CustomInputText from "../../../components/customInputText/customInputText";
-import ImageUpload from "../../../components/profileImageUpload/profileImageUpload";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { MuiTelInput } from "mui-tel-input";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import {
-  ProjectTypes,
-  LeadSources,
-  AvatarArr,
-  Priority,
-} from "../../../constants/constant";
-import SelectIconDropdown from "../../../components/singleSelectIconDropdown/singleSelectIconDropdown";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { MuiTelInput } from "mui-tel-input";
 import { useRouter } from "next/router";
+import React, { useState } from "react";
+import ProjectEye from "../../../../assets/icons/project-eye";
+import SuccessTick from "../../../../assets/icons/success-tick";
+import UsersInfo from "../../../../assets/icons/users-info";
+import CustomInputText from "../../../components/customInputText/customInputText";
+import ColorlibStepIcon from "../../../components/customStepper/colorStepicon";
+import ImageUpload from "../../../components/profileImageUpload/profileImageUpload";
+import SelectIconDropdown from "../../../components/singleSelectIconDropdown/singleSelectIconDropdown";
+import {
+  AvatarArr,
+  LeadSources,
+  Priority,
+  ProjectTypes,
+} from "../../../constants/constant";
 
 const CreateLeadForm: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);

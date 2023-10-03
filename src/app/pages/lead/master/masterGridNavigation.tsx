@@ -194,7 +194,7 @@ export default function MasterGridNavigation({
                       | "success"
                       | "warning"
                   }
-                  label={`${tabNames[value].count} Leads`}
+                  label={`${leadsData?.length} Leads`}
                 />
               </ThemeProvider>
             </div>

@@ -19,6 +19,8 @@ import { MuiTelInput } from "mui-tel-input";
 import TickIcon from "@/assets/icons/tick-icon";
 import CloseIcon from "@/assets/icons/close-icon";
 import { organiationTypes } from "@/app/constants/constant";
+import Image from 'next/image'
+
 
 const SignupCard: React.FC = () => {
   const isSmallScreen = useMediaQuery("(max-width: 990.95px)");
@@ -240,9 +242,8 @@ const SignupCard: React.FC = () => {
           >
             <Box className="w-100 mt-5 px-2">
               <Box className="">
-                <img
+                <Image
                   src={"/images/logo.png"}
-                  srcSet={"/images/logo.png"}
                   style={{ width: "250px", height: "auto" }}
                   alt={"logo"}
                   loading="lazy"

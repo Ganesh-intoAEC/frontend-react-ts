@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
 
-const ReactQuill = dynamic(import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import {
   Button,
@@ -52,7 +51,8 @@ function Notes() {
   const [deleteConfirmIndex, setDeleteConfirmIndex] = useState<number | null>(
     null
   );
- 
+  const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }),[]);
+
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],

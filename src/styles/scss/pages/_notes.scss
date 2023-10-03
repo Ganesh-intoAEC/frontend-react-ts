@@ -1,0 +1,35 @@
+
+  .ql-editor, .viewNoteContainer{
+    min-height: 200px;
+    overflow-y: scroll;
+    max-height: 200px;
+    
+    &::-webkit-scrollbar {
+      width: 10px; // Width of the scrollbar
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background-color: #b8b8b8 !important; // Color of the thumb
+      border-radius: 5px !important; // Round the corners of the thumb
+    }
+  
+    &::-webkit-scrollbar-track {
+      background-color: #ffffff; // Color of the track
+    }
+  
+
+  }
+  .react-quill .ql-container {
+    font-family: 'poppins'!important;
+  }
+
+  .ql-container.ql-snow{
+    border:none !important
+  }
+  .ql-toolbar.ql-snow{
+    border: none !important;
+    border-bottom: 1px solid #ccc !important;
+    box-sizing: border-box !important;
+    font-family: 'poppins' !important;
+    padding: 10px !important;
+  }

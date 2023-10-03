@@ -1,4 +1,3 @@
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import {
   Box,
   Button,
@@ -13,6 +12,7 @@ import { alpha, styled } from "@mui/material/styles";
 
 import {
   DateCalendar,
+  DateRangeIcon,
   LocalizationProvider,
   PickersDay,
   PickersDayProps,
@@ -109,10 +109,11 @@ function Day(props: PickersDayProps<Dayjs> & DayProps) {
 }
 
 interface CustomDateRangePickerTypes {
+  label: string,
   onApply: (startDate?: Dayjs, endDate?: Dayjs) => void;
 }
 
-const CustomDateRangePicker = ({ onApply }: CustomDateRangePickerTypes) => {
+const CustomDateRangePicker = ({label, onApply }: CustomDateRangePickerTypes) => {
   const [anchorEl, setAnchorEl] = useState<
     (EventTarget & HTMLDivElement) | null
   >(null);
@@ -133,17 +134,18 @@ const CustomDateRangePicker = ({ onApply }: CustomDateRangePickerTypes) => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div>
+      <div className="mt-1 mb-2">
         <TextField
-          label="Lead Created On"
+          label={label}
           variant="standard"
           onClick={handleOpenPopover}
           aria-readonly
+          fullWidth
           sx={{ cursor: "pointer" }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <ArrowDropDownIcon />
+                <DateRangeIcon />
               </InputAdornment>
             ),
           }}
@@ -246,7 +248,19 @@ const CustomDateRangePicker = ({ onApply }: CustomDateRangePickerTypes) => {
               marginLeft={"auto"}
               direction={"row"}
             >
-              <Box>
+              <Box   sx={{'& .MuiButtonBase-root':{
+                    textTransform:'Capitalize',
+                    padding:'0 6px',
+                    margin: '6px',
+                    background:'#f0f0f0',
+                    color: '#000000',
+                    ':hover':{
+                      background:'#3CA2FF',
+                      color: '#ffffff'
+                    }
+                  }
+                    
+                  }}>
                 <Button
                   onClick={() => {
                     if (startDate) {
@@ -255,6 +269,7 @@ const CustomDateRangePicker = ({ onApply }: CustomDateRangePickerTypes) => {
                       setStartDate(dayjs());
                     }
                   }}
+                
                 >
                   Today
                 </Button>
@@ -281,21 +296,39 @@ const CustomDateRangePicker = ({ onApply }: CustomDateRangePickerTypes) => {
                 &nbsp;-&nbsp;
                 <Typography>{endDate?.format("DD-MM-YYYY")}</Typography>
               </Box>
-              <Box>
+              <Box  sx={{'& .MuiButtonBase-root':{
+                  textTransform:'Capitalize',
+                  padding:'0 6px',
+                  margin: '6px',
+                  background:'#f0f0f0',
+                  color: '#000000',
+                  ':hover':{
+                    background:'#3CA2FF',
+                    color: '#ffffff',
+                  },
+                  ':disabled':{
+                    opacity:'0.4'
+                  }
+                }
+                  
+                }}>
                 <Button
                   onClick={() => {
                     setStartDate(undefined);
                     setEndDate(undefined);
                     handleClosePopover();
                   }}
+                  disabled={startDate === undefined}
                 >
                   Clear
                 </Button>
                 <Button
+               
                   onClick={() => {
                     onApply(startDate, endDate);
                     handleClosePopover();
                   }}
+                  
                 >
                   Apply
                 </Button>

@@ -20,7 +20,7 @@ const MenuProps = {
 
 
 interface MultipleSelectDropdownProps {
-  dataArr: string[]; 
+  dataArr: string[]  ; 
   label: string
 }
 
@@ -68,12 +68,13 @@ const  MultipleSelectDropdown:React.FC<MultipleSelectDropdownProps> = ({
         labelId="demo-multiple-checkbox-label"
         id="demo-multiple-checkbox"
         multiple
-        value={selectedOptions}
+        value={(selectedOptions)}
         onChange={handleChange}
         renderValue={renderValue}
         MenuProps={{...MenuProps,
           disableScrollLock: true,
         }}
+        defaultValue={[]}
       >
         <MenuItem sx={{'& .MuiTypography-root':{fontSize:'12px'}, '& .MuiCheckbox-root':{padding:'4px'}}} value="selectAll">
           <Checkbox checked={selectAll} />

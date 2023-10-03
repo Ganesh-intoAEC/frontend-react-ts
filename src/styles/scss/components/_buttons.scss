@@ -1,5 +1,5 @@
 .btnErrorUI{
-    color: #ffffff;
+    color: #ffffff !important;
     width: 160px;
     height: 42px;
     border-radius: 4px;
@@ -18,7 +18,7 @@
     }
 }
 .btnSuccessUI{
-    color: #ffffff;
+    color: #ffffff !important;
     width: 160px;
     height: 42px;
     border-radius: 4px;
@@ -37,6 +37,29 @@
     }
 }
 
+.btnPrimaryUI{
+    color: #ffffff !important;
+    width: 160px;
+    height: 42px;
+    border-radius: 4px;
+    background: #3CA2FF !important;
+    box-shadow: 0px 4px 10px 0px rgba(16, 156, 241, 0.24);
+    &:hover{
+        background-color: #0f6dc5 !important;
+        svg{
+            fill: #ffffff !important;
+        }
+      }
+  
+    svg{
+        width: 12px;
+        height: 12px;
+        fill: #ffffff;
+    }
+    span{
+        text-transform: capitalize;
+    }
+}
 .backButtonUI{
     font-size: 13px !important;
               padding: 3px 10px !important;

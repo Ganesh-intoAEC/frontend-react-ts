@@ -61,6 +61,7 @@ const SelectIconDropdown: React.FC<SingleSelectIconDropdownProps> = ({
         id="custom-select"
         value={dataArr.indexOf(selectedItem as Option).toString()}
         onChange={handleChange}
+        defaultValue=''
         fullWidth
         renderValue={() => (
           <div className='d-flex align-items-center'>

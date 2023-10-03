@@ -1,5 +1,5 @@
 import Head from "next/head";
-import SignInCard from "./sign-in/signInForm";
+import SignInCard from "../app/pages/signIn/signInForm";
 
 
 export default function Home() {

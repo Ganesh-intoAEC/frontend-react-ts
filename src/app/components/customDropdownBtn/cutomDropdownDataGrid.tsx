@@ -26,6 +26,7 @@ margin:'3px -2px'
 const dropdownStyle = {
   '& .MuiPaper-root': {
       width: '140px !important',
+      left: "calc(100% - 150px) !important",
   },
   '& .MuiTypography-root':{
     fontSize:'13px'

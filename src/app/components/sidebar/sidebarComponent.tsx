@@ -117,7 +117,7 @@ export default function MiniDrawer() {
     const isLoggedIn = false;
 
     // Pass isLoggedIn as a query parameter or as part of the route
-    router.push(`/sign-in?isLoggedIn=${isLoggedIn}`);
+    router.push(`/signIn?isLoggedIn=${isLoggedIn}`);
   };
 
   return (
@@ -265,7 +265,7 @@ export default function MiniDrawer() {
             {
               text: "Lead",
               icon: <PeopleAltIcon />,
-              to: "/leads/create-lead",
+              to: "/leads/initial",
               path: "/leads",
             },
           ].map((item) => (

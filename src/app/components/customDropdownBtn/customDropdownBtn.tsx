@@ -45,7 +45,10 @@ const CustomDropdownBtn: React.FC = () => {
 
   const handleClose = (value: string) => {
     if(value == 'userAdd'){
-      push('/create-lead-form')
+      push('/leads/create')
+    }
+    if(value == 'upload'){
+      push('/leads/upload')
     }
     setAnchorEl(null);
     setIsMenuOpen(false);
@@ -85,7 +88,7 @@ const CustomDropdownBtn: React.FC = () => {
           <ListItemText>Create Lead</ListItemText>
         </MenuItem>
 
-        <MenuItem onClick={() => handleClose('')}>
+        <MenuItem onClick={() => handleClose('upload')}>
           <ListItemIcon>
             <UserUpload style={{ width: '15px', height: '15px', fill:'#323C47' }} />
           </ListItemIcon>

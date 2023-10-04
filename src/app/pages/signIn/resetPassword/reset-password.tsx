@@ -14,6 +14,8 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import router from "next/router";
 import CloseIcon from "@/assets/icons/close-icon";
 import TickIcon from "@/assets/icons/tick-icon";
+import Image from 'next/image'
+
 
 const ResetPassword = () => {
   const isSmallScreen = useMediaQuery("(min-width: 990.95px)");
@@ -296,11 +298,10 @@ const ResetPassword = () => {
               </Box>
               {isSmallScreen && (
                 <Box className="col-lg-7 d-flex justify-content-center align-items-center px-2">
-                  <img
+                  <Image
                     src={"/images/reset-passwordImg.svg"}
-                    srcSet={"/images/reset-passwordImg.svg"}
                     style={{ width: "300px", height: "auto" }}
-                    alt={"logo"}
+                    alt={"reset-passwordImg"}
                     loading="lazy"
                   />
                 </Box>

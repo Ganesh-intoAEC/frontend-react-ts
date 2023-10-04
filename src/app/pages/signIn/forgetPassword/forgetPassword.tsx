@@ -10,6 +10,8 @@ import {
 
 import router from "next/router";
 import { ToastContainer, toast } from "react-toastify";
+import Image from 'next/image'
+
 
 const ForgotPassword: React.FC = () => {
   const isSmallScreen = useMediaQuery("(min-width: 990.95px)");
@@ -152,11 +154,10 @@ else{
               </Box>
               {isSmallScreen && (
                 <Box className="col-lg-7 px-2">
-                  <img
+                  <Image
                     src={"/images/forget-passwordImg.svg"}
-                    srcSet={"/images/forget-passwordImg.svg"}
                     style={{ width: "300px", height: "auto" }}
-                    alt={"logo"}
+                    alt={"forget-passwordImg"}
                     loading="lazy"
                   />
                 </Box>

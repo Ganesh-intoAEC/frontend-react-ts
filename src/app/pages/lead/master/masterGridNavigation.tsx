@@ -18,6 +18,8 @@ import WonIcon from "../../../../assets/icons/won-icon";
 import CustomDatagrid from "./_customDatagrid";
 import FilterFields from "./_filterFields";
 import { useRouter } from "next/router";
+import Image from 'next/image'
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -333,11 +335,10 @@ export default function MasterGridNavigation({
                              alignItems: "center",
                            }}
                          >
-                           <img
+                           <Image
                              src={"/images/no-data-img.svg"}
-                             srcSet={"/images/no-data-img.svg"}
                              style={{ width: "500px", height: "auto" }}
-                             alt={"logo"}
+                             alt={"no-data"}
                              loading="lazy"
                            />
                            <div>
@@ -389,11 +390,10 @@ export default function MasterGridNavigation({
                              alignItems: "center",
                            }}
                          >
-                           <img
+                           <Image
                              src={"/images/no-data-img.svg"}
-                             srcSet={"/images/no-data-img.svg"}
                              style={{ width: "500px", height: "auto" }}
-                             alt={"logo"}
+                             alt={"no-data"}
                              loading="lazy"
                            />
                            <div>
@@ -433,11 +433,10 @@ export default function MasterGridNavigation({
                           alignItems: "center",
                         }}
                       >
-                        <img
+                        <Image
                           src={"/images/waiting-to-search.svg"}
-                          srcSet={"/images/waiting-to-search.svg"}
                           style={{ width: "500px", height: "auto" }}
-                          alt={"logo"}
+                          alt={"waiting-to-search"}
                           loading="lazy"
                         />
                         <div>
@@ -476,11 +475,10 @@ export default function MasterGridNavigation({
                           alignItems: "center",
                         }}
                       >
-                        <img
+                        <Image
                           src={"/images/no-data-img.svg"}
-                          srcSet={"/images/no-data-img.svg"}
                           style={{ width: "500px", height: "auto" }}
-                          alt={"logo"}
+                          alt={"no-data"}
                           loading="lazy"
                         />
                         <div>

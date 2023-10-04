@@ -21,6 +21,8 @@ import Tooltip from "@mui/material/Tooltip";
 import router, { useRouter } from "next/router";
 import { ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { Logout, PersonAdd, Settings } from "@mui/icons-material";
+import Image from 'next/image'
+
 
 const drawerWidth = 240;
 
@@ -129,9 +131,8 @@ export default function MiniDrawer() {
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: "flex" }}>
             <Box sx={{ width: "180px", padding: "10px" }}>
-              <img
+              <Image
                 src={"/images/logo.png"}
-                srcSet={"/images/logo.png"}
                 style={{ width: "100%", height: "auto" }}
                 alt={"logo"}
                 loading="lazy"

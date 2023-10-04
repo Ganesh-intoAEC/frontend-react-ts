@@ -16,6 +16,8 @@ import {
 import Link from "next/link";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import router from "next/router";
+import Image from 'next/image'
+
 
 const SignInCard: React.FC = () => {
   const isSmallScreen = useMediaQuery('(max-width: 990.95px)');
@@ -48,11 +50,10 @@ const SignInCard: React.FC = () => {
     <div className="container signInUI  w-100 m-0" >
       <div className="row ">
         {!isSmallScreen &&(<div className="col-lg-7 text-center">
-        <img
+        <Image
                   src={"/images/signin-conceptImg.svg"}
-                  srcSet={"/images/signin-conceptImg.svg"}
                   style={{  height: "auto" }}
-                  alt={"logo"}
+                  alt={"signin-conceptImg"}
                   loading="lazy"
                 />
 
@@ -69,9 +70,8 @@ const SignInCard: React.FC = () => {
           >
             <Box className="w-100 px-2">
               <Box className="my-3 py-5">
-              <img
+              <Image
                   src={"/images/logo.png"}
-                  srcSet={"/images/logo.png"}
                   style={{ width: "250px", height: "auto" }}
                   alt={"logo"}
                   loading="lazy"

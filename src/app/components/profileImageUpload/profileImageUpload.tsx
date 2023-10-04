@@ -13,6 +13,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import Image from 'next/image'
+
 
 
 
@@ -120,10 +122,11 @@ const ImageUpload: React.FC = () => {
         }}
       >
         {image ? (
-          <img
+          <Image
             src={image}
             alt="User"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+            loading="lazy"
           />
         ) : (
           defaultUserIcon

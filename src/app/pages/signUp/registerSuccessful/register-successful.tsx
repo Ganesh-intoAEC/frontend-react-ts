@@ -10,6 +10,8 @@ import {
 
 import router from "next/router";
 import TickIcon from "../../../../../public/icons/tick-icon";
+import Image from 'next/image'
+
 
 const RegisterSuccess: React.FC = () => {
 
@@ -31,9 +33,8 @@ const RegisterSuccess: React.FC = () => {
           >
             <Box className="col-lg-12 col-md-12 px-2 py-2">
             <Box className=" text-center py-2">
-              <img
+              <Image
                   src={"/images/logo.png"}
-                  srcSet={"/images/logo.png"}
                   style={{ width: "250px", height: "auto" }}
                   alt={"logo"}
                   loading="lazy"
@@ -41,11 +42,10 @@ const RegisterSuccess: React.FC = () => {
 
               </Box>
               <Box className='text-center'>
-              <img
+              <Image
                   src={"/images/signup-success.png"}
-                  srcSet={"/images/signup-success.png"}
                   style={{ width: "250px", height: "auto" }}
-                  alt={"logo"}
+                  alt={"signup-success"}
                   loading="lazy"
                 />
 

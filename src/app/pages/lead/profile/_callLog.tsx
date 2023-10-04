@@ -31,6 +31,8 @@ import CustomTablePagination from "@/app/components/customTablePagination/custom
 import DatepickerIcon from "@/assets/icons/datepicker-icon";
 import { v4 as uuidv4 } from 'uuid';
 import CustomDateRangePicker from "@/app/components/CustomDateRangePicker";
+import Image from 'next/image'
+
 
 interface CallLog {
   id: string; // Use UUID as a unique identifier field
@@ -391,11 +393,10 @@ export default function CallLog() {
         {callLogs.length === 0 && (
             <div>
            
-            <img
+            <Image
                 src={"/images/no-data-found-1.svg"}
-                srcSet={"/images/no-data-found-1.svg"}
                 style={{ width: "100%", height: "auto" }}
-                alt={"logo"}
+                alt={"no-data"}
                 loading="lazy"
               />
                

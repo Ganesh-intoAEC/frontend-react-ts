@@ -33,6 +33,8 @@ import PlusChatIcon from "@/assets/icons/plusChat-icon";
 import CallLog from "./_callLog";
 import Notes from "./_notes";
 import ActivityLog from "./_activityLog";
+import Image from 'next/image'
+
  
 const LeadProfile: React.FC = () => {
   const [leadStatus, setLeadStatus] = React.useState("New");
@@ -278,11 +280,10 @@ const LeadProfile: React.FC = () => {
                   <div className="mb-5">
                      <Typography variant="h4">{'Questionnaire'}</Typography>
                     </div>
-                  <img
+                  <Image
                       src={"/images/Coming soon page img.svg"}
-                      srcSet={"/images/Coming soon page img.svg"}
                       style={{ width: "280px", height: "auto" }}
-                      alt={"logo"}
+                      alt={"Coming soon page"}
                       loading="lazy"
                     />
                     <div className="text-center">
@@ -295,11 +296,10 @@ const LeadProfile: React.FC = () => {
                   <div className="mb-5">
                      <Typography variant="h4">{'Proposal'}</Typography>
                     </div>
-                  <img
+                  <Image
                       src={"/images/Coming soon page img.svg"}
-                      srcSet={"/images/Coming soon page img.svg"}
                       style={{ width: "280px", height: "auto" }}
-                      alt={"logo"}
+                      alt={"Coming soon page"}
                       loading="lazy"
                     />
                     <div className="text-center">
@@ -309,11 +309,10 @@ const LeadProfile: React.FC = () => {
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
                   <div>
-                    <img
+                    <Image
                       src={"/images/Coming soon page img.svg"}
-                      srcSet={"/images/Coming soon page img.svg"}
                       style={{ width: "280px", height: "auto" }}
-                      alt={"logo"}
+                      alt={"Coming soon page"}
                       loading="lazy"
                     />
                     <div>

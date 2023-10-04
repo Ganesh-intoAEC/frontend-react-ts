@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import NextImage from "@/app/components/NextImage";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -9,16 +9,20 @@ import {
   FormControlLabel,
   InputAdornment,
   InputLabel,
-  OutlinedInput, useMediaQuery
+  OutlinedInput,
+  useMediaQuery,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import router from "next/router";
 
 const SignInCard: React.FC = () => {
   const isSmallScreen = useMediaQuery("(max-width: 990.95px)");
+  const [username, setUsername] = useState<string>();
+  const { data: session, status } = useSession();
+  const [password, setPassword] = useState<string>();
 
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -30,12 +34,14 @@ const SignInCard: React.FC = () => {
     event.preventDefault();
   };
 
-  const handleLogin = () => {
-    // Assuming you want to set isLoggedIn to true upon login
-    const isLoggedIn = true;
-
-    // Pass isLoggedIn as a query parameter or as part of the route
-    router.push(`/dashboard?isLoggedIn=${isLoggedIn}`);
+  const handleLogin = async () => {
+    if (password && username) {
+      await signIn("credentials", {
+        username,
+        password,
+        callbackUrl: "/dashboard",
+      });
+    }
   };
 
   return (
@@ -93,6 +99,9 @@ const SignInCard: React.FC = () => {
                     inputRef={(input) => input && input.focus()}
                     InputLabelProps={{ shrink: true }}
                     fullWidth
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
                     sx={{
                       m: 1,
                       color: "#000000",
@@ -125,6 +134,9 @@ const SignInCard: React.FC = () => {
                     <OutlinedInput
                       id="outlined-adornment-password"
                       type={showPassword ? "text" : "password"}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                      }}
                       endAdornment={
                         <InputAdornment position="end">
                           <IconButton
@@ -162,7 +174,7 @@ const SignInCard: React.FC = () => {
                 </Box>
                 <Box className="my-5">
                   <Button
-                    onClick={handleLogin}
+                    onClick={() => handleLogin()}
                     sx={{
                       width: "160px",
                       height: "42px",
@@ -189,7 +201,7 @@ const SignInCard: React.FC = () => {
                         fontWeight: "600",
                         color: "#109CF1",
                       }}
-                      href="/signUp"
+                      href="auth/signUp"
                     >
                       {"Sign Up"}
                     </Link>

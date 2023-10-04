@@ -32,7 +32,7 @@ export default NextAuth({
     async jwt({ token, user }: any) {
       return { ...token, ...user };
     },
-    async session({ token, session }) {
+    async session({ token, session }:any) {
       session.user = token;
       return session;
     },

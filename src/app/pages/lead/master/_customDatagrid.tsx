@@ -5,7 +5,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import * as React from "react";
+import React, { useEffect } from "react";
 import CustomTablePagination from "../../../components/customTablePagination/customTablePagination";
 // import TablePagination from '@mui/material/TablePagination';
 import Avatar from "@mui/material/Avatar";
@@ -121,7 +121,7 @@ const rows: Row[] = [
 
 export default function CustomDatagrid({
   leadsData,
-  leadNameSearch
+  leadNameSearch,
 }: MasterGridNavigationTypes) {
   // const [page] = React.useState(0);
   const [rowsPerPage] = React.useState(5);
@@ -130,34 +130,32 @@ export default function CustomDatagrid({
   const [orderBy, setOrderBy] = React.useState<Column | "">("");
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
   const [hoveredRow, setHoveredRow] = React.useState<number | null>(null);
-  const [isRowSelected, setIsRowSelected] = React.useState<boolean | null>(false);
+  const [isRowSelected, setIsRowSelected] = React.useState<boolean | null>(
+    false
+  );
   const [rowStageModal, setRowStageModal] = React.useState(false);
   const [rowStageSelected, setRowStageSelected] = React.useState("");
-
-  
 
   // const [selectedDropdownValue, setSelectedDropdownValue] =
   //   React.useState("New");
 
-
-  //Date format convert from string 
+  //Date format convert from string
   const formatDate = (timestampString: string): string => {
     const timestamp: number = parseInt(timestampString, 10);
     const date: Date = new Date(timestamp);
-  
-    const day: string = String(date.getDate()).padStart(2, '0');
-    const month: string = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+
+    const day: string = String(date.getDate()).padStart(2, "0");
+    const month: string = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
     const year: number = date.getFullYear();
-  
+
     return `${day}-${month}-${year}`;
   };
 
-  //Amount format convert from string 
-  const formatAmount = (amountString: string): string =>{
+  //Amount format convert from string
+  const formatAmount = (amountString: string): string => {
     const amountNumber = parseFloat(amountString); // Convert to a number if it's a string
-  const formattedAmount = amountNumber.toLocaleString('en-IN'); // Use 'en-IN' locale for Indian number formatting
-  return formattedAmount
- 
+    const formattedAmount = amountNumber.toLocaleString("en-IN"); // Use 'en-IN' locale for Indian number formatting
+    return formattedAmount;
   };
 
   const handleRowHover = (rowIndex: number) => {
@@ -261,16 +259,15 @@ export default function CustomDatagrid({
   const rowStageModalClose = () => {
     setRowStageModal(false);
   };
-  
 
   //grid master search
-  const onLeadGridSearch = (leadName: string) => {    
+  const onLeadGridSearch = (leadName: string) => {
     if (leadName.length >= 3) {
       console.log(leadName);
-       leadNameSearch(leadName);
+      leadNameSearch(leadName);
     }
   };
-  
+
   // const handleChangePage = (event: unknown, newPage: number) => {
   //   setPage(newPage);
   // };
@@ -444,7 +441,7 @@ export default function CustomDatagrid({
             <TableBody>
               {leadsData?.map((lead, rowIndex) => (
                 <TableRow
-                  key={lead.leadName}
+                  key={lead.leadId}
                   onMouseEnter={() => handleRowHover(rowIndex)}
                   onMouseLeave={handleRowLeave}
                 >
@@ -515,7 +512,9 @@ export default function CustomDatagrid({
                     </Stack>
                   </TableCell>
 
-                  <TableCell align="center">{formatDate(lead.createdAt)}</TableCell>
+                  <TableCell align="center">
+                    {formatDate(lead.createdAt)}
+                  </TableCell>
                   <TableCell align="center">
                     {formatAmount(lead.estimatedProfitFromLead)}
                   </TableCell>

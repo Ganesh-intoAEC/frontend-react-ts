@@ -1,7 +1,7 @@
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 
 // import ActiveIcon from '../../../assets/icons/active-user';
 import NextImage from "@/app/components/NextImage";
@@ -19,6 +19,8 @@ import { LeadsTypes } from "../../../../pages/leads/master";
 import CustomDropdownBtn from "../../../components/customDropdownBtn/customDropdownBtn";
 import CustomDatagrid from "./_customDatagrid";
 import FilterFields from "./_filterFields";
+import { useFetch } from "use-http";
+import { useSession } from "next-auth/react";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -93,16 +95,65 @@ function a11yProps(index: number) {
 
 export interface MasterGridNavigationTypes {
   leadsData: Array<LeadsTypes> | null | undefined;
-  leadNameSearch : (leadName: string) => void;
+  leadNameSearch: (leadName: string) => void;
 }
 
-export default function MasterGridNavigation({
-  leadsData,
-  leadNameSearch
-}: MasterGridNavigationTypes) {
+export default function MasterGridNavigation() {
   const isSmallScreen = useMediaQuery("(max-width: 959.95px)");
   const router = useRouter();
- 
+  const { data: session, status } = useSession();
+  const [leadsData, setLeadsData] = useState<Array<LeadsTypes>>([]);
+  const { post, response, loading, error } = useFetch(
+    `${process.env.NEXT_PUBLIC_ENDPOINT_FETCH}`,
+    {
+      headers: {
+        Authorization: `Bearer ${session?.user?.IdToken}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const fetchData = async (
+    queryParameters: Record<string, string | string[]>
+  ) => {
+    const requestData = {
+      eventType: "GET_LEADS",
+      leadOwnerId: "07edeeb1-c4da-41fd-a8ec-8014320b1ef6",
+      filters: {
+        organizationId: "d7d019ae-d059-46f6-b88e-d1e719bc1fe6",
+        ...queryParameters,
+      },
+      pageNumber: 1,
+      pageCount: 10,
+    };
+
+    await post(requestData);
+
+    if (response.ok) {
+      const res = await response.json();
+      setLeadsData(res?.body?.result || []);
+    } else {
+      // Handle error here
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const onLeadGridSearch = (leadName: string) => {
+    if (leadName.length >= 0) {
+      const queryParameters: Record<string, string | string[]> = {
+        leadName: leadName, // Add leadName to queryParameters
+      };
+      fetchData(queryParameters);
+    }
+  };
+
+
+
+  useEffect(() => {
+    (async () => {
+      await fetchData(router.query as Record<string, string | string[]>);
+    })();
+  }, [router.query]);
 
   const [value, setValue] = React.useState(0);
 
@@ -133,13 +184,10 @@ export default function MasterGridNavigation({
     setValue(newValue);
   };
 
-  const onLeadGridSearch = (leadName: string) => {    
-  
-       leadNameSearch(leadName);
+  // const onLeadGridSearch = (leadName: string) => {
+  //   leadNameSearch(leadName);
+  // };
 
-  };
-  
- 
   return (
     <div className="container mx-2 mt-5 pt-3">
       <div className="row mt-5 justify-content-between mb-1">
@@ -291,7 +339,10 @@ export default function MasterGridNavigation({
                   </div>
                   <div className="mt-5 ">
                     <div>
-                      <CustomDatagrid leadNameSearch={onLeadGridSearch} leadsData={leadsData} />
+                      <CustomDatagrid
+                        leadNameSearch={onLeadGridSearch}
+                        leadsData={leadsData}
+                      />
                     </div>
                   </div>
                 </div>
@@ -348,7 +399,10 @@ export default function MasterGridNavigation({
                   </div>
                   <div className="mt-5 ">
                     <div>
-                      <CustomDatagrid leadNameSearch={onLeadGridSearch}  leadsData={leadsData} />
+                      <CustomDatagrid
+                        leadNameSearch={onLeadGridSearch}
+                        leadsData={leadsData}
+                      />
                     </div>
                   </div>
                 </div>
@@ -396,7 +450,7 @@ export default function MasterGridNavigation({
               )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-            {leadsData ? (
+              {leadsData ? (
                 <div>
                   <div className="mt-4">
                     <div>
@@ -405,7 +459,10 @@ export default function MasterGridNavigation({
                   </div>
                   <div className="mt-5 ">
                     <div>
-                      <CustomDatagrid leadNameSearch={onLeadGridSearch}  leadsData={leadsData} />
+                      <CustomDatagrid
+                        leadNameSearch={onLeadGridSearch}
+                        leadsData={leadsData}
+                      />
                     </div>
                   </div>
                 </div>

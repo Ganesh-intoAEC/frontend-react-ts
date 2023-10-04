@@ -1,12 +1,9 @@
-
-import React from 'react'
-import SignInCard from '@/app/pages/signIn/signInForm'
-
+import React from "react";
+import SignInCard from "@/app/pages/signIn/signInForm";
+import { SessionProvider } from "next-auth/react";
 
 function Signin() {
-  return (
-    <SignInCard/>
-  )
+  return <SignInCard />;
 }
 
-export default Signin
+export default Signin;

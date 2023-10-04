@@ -22,6 +22,7 @@ import { CSSObject, Theme, styled } from "@mui/material/styles";
 import router, { useRouter } from "next/router";
 import * as React from "react";
 import NextImage from "../NextImage";
+import { signOut } from "next-auth/react";
 
 const drawerWidth = 240;
 
@@ -115,10 +116,7 @@ export default function MiniDrawer() {
   //logout
   const handleLogout = () => {
     // Assuming you want to set isLoggedIn to true upon login
-    const isLoggedIn = false;
-
-    // Pass isLoggedIn as a query parameter or as part of the route
-    router.push(`/signIn?isLoggedIn=${isLoggedIn}`);
+    signOut({ callbackUrl: "/auth/signIn" });
   };
 
   return (

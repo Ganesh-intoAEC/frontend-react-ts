@@ -9,6 +9,7 @@ import FilterIcon from "../../../../assets/icons/filter-icon";
 
 import CustomDateRangePicker from "@/app/components/CustomDateRangePicker";
 import useFetch from "use-http";
+import { useSession } from "next-auth/react";
 
 export interface leadStatusesTypes {
   leadStatusId: string;
@@ -19,9 +20,6 @@ export interface leadSourcesTypes {
   leadSourceSubCategory: string;
 }
 
-const token =
-  "eyJraWQiOiJKUnRCZ01KdlRUazJ1eUthQU9iR0I3RFZqYVRYUjJKNkg0T0lEaTg2XC95WT0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI2OGU3Y2EwNS05MDc1LTQ1ZDEtOGVkMi0wYjQwZjkyYzc3NDYiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiY3VzdG9tOm9yZ2FuaXphdGlvbl9uYW1lIjoiQUVDIEFyY2hpdGVjdHMiLCJjdXN0b206b3JnYW5pemF0aW9uX2lkIjoiOTRhMTE1MTktMTU4Yi00NjRiLWEwOWUtZTk4M2I5OWI0ZGQzIiwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmFwLXNvdXRoLTEuYW1hem9uYXdzLmNvbVwvYXAtc291dGgtMV9nUmM2Mjc3ZTgiLCJjb2duaXRvOnVzZXJuYW1lIjoiNjhlN2NhMDUtOTA3NS00NWQxLThlZDItMGI0MGY5MmM3NzQ2IiwiZ2l2ZW5fbmFtZSI6IkRhdmlkIiwib3JpZ2luX2p0aSI6ImVhN2I0NjQ4LTZhMzgtNDdlZC1iMjJmLWE5ZWNkYmU1MjdmYSIsImF1ZCI6IjMycmowYjFiMGs1ZzJodmZjMDRwaGY4OWdiIiwiZXZlbnRfaWQiOiI3MDgwZGM5ZC03OTY1LTQ0NDEtOWRlNy0wY2UxZGFlYzMxY2EiLCJ1cGRhdGVkX2F0IjoxNjk2MzE2NDk0LCJ0b2tlbl91c2UiOiJpZCIsImN1c3RvbTpvcmdhbml6YXRpb25fdHlwZSI6IkFSQ0hJVEVDVCxWRU5ET1IiLCJhdXRoX3RpbWUiOjE2OTYzNDY5NTgsInBob25lX251bWJlciI6Iis5MTkzMDk4MzIyMjMiLCJleHAiOjE2OTYzNTA1NTgsImlhdCI6MTY5NjM0Njk1OCwiZmFtaWx5X25hbWUiOiJBIiwianRpIjoiOWFjMjdlZTEtYzBmNy00ODBiLTgyNmUtYjA3YzUyN2MwOWVjIiwiZW1haWwiOiJkYXZpZDVAZW1haWwuY29tIn0.XNmiyej3eCvsvc0CTYJ2GTKlv2l8RYfxMAE0303XCbW9bY0Wa1yC_tawl4ggExkB5LytDT8Skf-a8fRp08nbgSaUnBMORlZNiWNyWMEg9qnRG-hpkp_8KFcqvBiWlp0YyVlOJw1Zjb9-ywyNZSdrbOqIXReeeGYtmeHbnytH45XRLKMpaKGChGZEgeUIL_3VDzh1JNAhT-SAvLSWHrPzUo4iU_4cleheNNIh6UqMomQALlWbyBqfyJckk6XtkWK-N8p2QCicwar0C0rn82tBvMtaCmGKWG_MVC7u67C5x1gMJEBEOzlQlccmsEsaxQWTkGbDwXUCIjGsDMWIAd65Yg";
-
 export default function FilterFields() {
   const [leadStatus, setLeadStatus] = React.useState<Array<leadStatusesTypes>>(
     []
@@ -29,11 +27,12 @@ export default function FilterFields() {
   const [leadSources, setLeadSources] = React.useState<Array<leadSourcesTypes>>(
     []
   );
+  const { data: session } = useSession();
   const { post, response, error } = useFetch(
     `${process.env.NEXT_PUBLIC_ENDPOINT_FETCH}`,
     {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session?.user?.IdToken}`,
         "Content-Type": "application/json",
       },
     }
@@ -105,10 +104,13 @@ export default function FilterFields() {
             />
           </div>
           <div className=" col-lg-2 col-md-6 col-sm-12 pr-2">
-            <MultipleSelectDropdown label={"Lead Stage"} dataArr={leadStatus.map((status) => ({
+            <MultipleSelectDropdown
+              label={"Lead Stage"}
+              dataArr={leadStatus.map((status) => ({
                 id: status.leadStatusId,
                 value: status.leadStatusValue,
-              }))} />
+              }))}
+            />
           </div>
           <div className="col-lg-2 col-md-6 col-sm-12 pr-2">
             <MultipleSelectDropdown

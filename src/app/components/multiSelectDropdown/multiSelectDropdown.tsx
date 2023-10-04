@@ -5,10 +5,6 @@ import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-import {
-  // leadSourcesTypes,
-  // leadStatusesTypes,
-} from "@/app/pages/lead/master/_filterFields";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -31,30 +27,22 @@ const MultipleSelectDropdown: React.FC<MultipleSelectDropdownProps> = ({
   dataArr,
   label,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedOptions, setSelectedOptions] = React.useState<string[]>(
-    []
-    // (Array.isArray(dataArr) && dataArr[0] instanceof Object) ?
-    // dataArr.map((item: leadStatusesTypes | leadSourcesTypes) => item.leadStatusValue) :
-    // dataArr as unknown as string[]
-  );
-  // const [selectAll, setSelectAll] = React.useState<boolean>(true);
-
+  const [selectedOptions, setSelectedOptions] = React.useState<string[]>([]);
   const handleChange = (event: SelectChangeEvent<typeof selectedOptions>) => {
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   const value:any= event.target.value;
-
-    console.log("selectChangeValue:::::",value);
-    
-    setSelectedOptions(value)
-    // if (value.includes('selectAll')) {
-    //   setSelectAll(!selectAll);
-    //   setSelectedOptions(selectAll ? [] : dataArr as unknown as string[]);
-
-    // } else {
-    //   setSelectedOptions(value as string[]);
-    //   setSelectAll(value.length === dataArr.length);
-    // }
+    const value: any = event.target.value;
+    if (value.includes("selectAll")) {
+      const arr = dataArr.map((value) => value.id);
+      setSelectedOptions(["selectAll", ...arr]);
+    } else {
+      if (
+        selectedOptions.includes("selectAll") &&
+        !value.includes("selectAll")
+      ) {
+        setSelectedOptions([]);
+      } else {
+        setSelectedOptions(value);
+      }
+    }
   };
 
   const renderValue = (selected: string[]) => {
@@ -90,7 +78,7 @@ const MultipleSelectDropdown: React.FC<MultipleSelectDropdownProps> = ({
             }}
             value="selectAll"
           >
-            <Checkbox checked={true} />
+            <Checkbox checked={selectedOptions.includes("selectAll")} />
             <ListItemText primary="Select All" />
           </MenuItem>
           {(Array.isArray(dataArr) ? dataArr : []).map((item) => (
@@ -102,12 +90,8 @@ const MultipleSelectDropdown: React.FC<MultipleSelectDropdownProps> = ({
               key={item.id}
               value={item.id}
             >
-              <Checkbox
-                checked={selectedOptions.includes(item.id)}
-              />
-              <ListItemText
-                primary={item.value}
-              />
+              <Checkbox checked={selectedOptions.includes(item.id)} />
+              <ListItemText primary={item.value} />
             </MenuItem>
           ))}
         </Select>

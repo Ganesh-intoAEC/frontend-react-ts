@@ -8,8 +8,8 @@ import {
   StepLabel,
   Stepper,
   TextField,
-  Typography,
 } from "@mui/material";
+import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";

@@ -161,7 +161,7 @@ function ActivityLog() {
       {/* {cards.length === 0 && (
             <div>
            
-            <img
+            <Image
                 src={"/images/no-data-found-1.svg"}
                 srcSet={"/images/no-data-found-1.svg"}
                 style={{ width: "100%", height: "auto" }}

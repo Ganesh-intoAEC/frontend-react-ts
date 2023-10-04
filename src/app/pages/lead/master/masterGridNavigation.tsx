@@ -21,6 +21,7 @@ import CustomDatagrid from "./_customDatagrid";
 import FilterFields from "./_filterFields";
 import { useFetch } from "use-http";
 import { useSession } from "next-auth/react";
+import SkeletonMasterGrid from "./skeleton";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -147,8 +148,6 @@ export default function MasterGridNavigation() {
     }
   };
 
-
-
   useEffect(() => {
     (async () => {
       await fetchData(router.query as Record<string, string | string[]>);
@@ -189,383 +188,397 @@ export default function MasterGridNavigation() {
   // };
 
   return (
-    <div className="container mx-2 mt-5 pt-3">
-      <div className="row mt-5 justify-content-between mb-1">
-        <div className="col-lg-6 col-md-12 col-sm-12 mb-3">
-          <div className="row align-item-center">
-            <div className="mr-3">
-              <Typography variant="h5" className="fw-500 " gutterBottom>
-                {`All Leads`}
-              </Typography>
+    <>
+      {/* {loading || status == "loading" ? (
+        <SkeletonMasterGrid />
+      ) : ( */}
+        <div className="container mx-2 mt-5 pt-3">
+          <div className="row mt-5 justify-content-between mb-1">
+            <div className="col-lg-6 col-md-12 col-sm-12 mb-3">
+              <div className="row align-item-center">
+                <div className="mr-3">
+                  <Typography variant="h5" className="fw-500 " gutterBottom>
+                    {`All Leads`}
+                  </Typography>
+                </div>
+                <div>
+                  <ThemeProvider theme={theme}>
+                    <Chip
+                      sx={{
+                        borderRadius: "3px",
+                        marginTop: "4px",
+                        boxShadow:
+                          "0px 0px 6px 0px rgba(48, 143, 229, 0.16) !important",
+                        "& .MuiChip-root.MuiChip-colorPrimary": {
+                          color: "#3CA2FF !important",
+                          boxShadow:
+                            "0px 0px 6px 0px rgba(48, 143, 229, 0.16) !important",
+                        },
+                        color: getLabelColor(tabNames[value].colorCode), // Set the label text color dynamically
+                      }}
+                      size="small"
+                      icon={<TripOriginIcon />}
+                      color={
+                        tabNames[value].colorCode as
+                          | "primary"
+                          | "default"
+                          | "secondary"
+                          | "error"
+                          | "info"
+                          | "success"
+                          | "warning"
+                      }
+                      label={`${leadsData?.length} Leads`}
+                    />
+                  </ThemeProvider>
+                </div>
+              </div>
             </div>
+            <div className="col-lg-6 col-md-12 col-sm-12 text-right">
+              <CustomDropdownBtn />
+            </div>
+          </div>
+          <div>
             <div>
-              <ThemeProvider theme={theme}>
-                <Chip
+              <Box>
+                <Tabs
+                  allowScrollButtonsMobile
+                  value={value}
+                  onChange={handleChange}
+                  variant={isSmallScreen ? "scrollable" : "standard"}
+                  scrollButtons={isSmallScreen ? true : false}
+                  aria-label="scrollable auto tabs example"
                   sx={{
-                    borderRadius: "3px",
-                    marginTop: "4px",
-                    boxShadow:
-                      "0px 0px 6px 0px rgba(48, 143, 229, 0.16) !important",
-                    "& .MuiChip-root.MuiChip-colorPrimary": {
-                      color: "#3CA2FF !important",
-                      boxShadow:
-                        "0px 0px 6px 0px rgba(48, 143, 229, 0.16) !important",
+                    "& .MuiButtonBase-root": { minHeight: "48px" },
+                    "& .Mui-selected": {
+                      background: "#3ca2ff2e",
                     },
-                    color: getLabelColor(tabNames[value].colorCode), // Set the label text color dynamically
+                    "& .Mui-selected svg": {
+                      fill: "#3CA2FF",
+                    },
                   }}
-                  size="small"
-                  icon={<TripOriginIcon />}
-                  color={
-                    tabNames[value].colorCode as
-                      | "primary"
-                      | "default"
-                      | "secondary"
-                      | "error"
-                      | "info"
-                      | "success"
-                      | "warning"
-                  }
-                  label={`${leadsData?.length} Leads`}
-                />
-              </ThemeProvider>
+                >
+                  <Tab
+                    {...a11yProps(0)}
+                    icon={
+                      <SnoozeIcon style={{ width: "20px", height: "20px" }} />
+                    }
+                    label="Active"
+                    iconPosition="start"
+                    sx={{
+                      width: "150px",
+                      textTransform: "Capitalize",
+                      borderBottom: 1,
+                      borderColor: "divider",
+                    }}
+                    onClick={() => {
+                      router.push({ query: { isActive: "true" } });
+                      setValue(0);
+                    }}
+                  />
+                  <Tab
+                    {...a11yProps(1)}
+                    icon={
+                      <SnoozeIcon style={{ width: "20px", height: "20px" }} />
+                    }
+                    iconPosition="start"
+                    label="Snoozed"
+                    onClick={() => {
+                      router.push({ query: { isSnoozed: "true" } });
+                      setValue(1);
+                    }}
+                    sx={{
+                      width: "150px",
+                      textTransform: "Capitalize",
+                      borderBottom: 1,
+                      borderColor: "divider",
+                    }}
+                  />
+                  <Tab
+                    {...a11yProps(2)}
+                    icon={
+                      <ArchiveIcon style={{ width: "20px", height: "20px" }} />
+                    }
+                    iconPosition="start"
+                    label="Archived"
+                    sx={{
+                      width: "150px",
+                      textTransform: "Capitalize",
+                      borderBottom: 1,
+                      borderColor: "divider",
+                    }}
+                    onClick={() => {
+                      router.push({ query: { isActive: "false" } });
+                      setValue(2);
+                    }}
+                  />
+                  <Tab
+                    {...a11yProps(3)}
+                    icon={<WonIcon style={{ width: "30px", height: "30px" }} />}
+                    iconPosition="start"
+                    label="Won"
+                    sx={{
+                      width: "150px",
+                      textTransform: "Capitalize",
+                      borderBottom: 1,
+                      borderColor: "divider",
+                    }}
+                  />
+                  <Tab
+                    {...a11yProps(4)}
+                    icon={
+                      <LostIcon style={{ width: "30px", height: "30px" }} />
+                    }
+                    iconPosition="start"
+                    label="Lost"
+                    sx={{
+                      width: "150px",
+                      textTransform: "Capitalize",
+                      borderBottom: 1,
+                      borderColor: "divider",
+                    }}
+                  />
+                </Tabs>
+
+                <CustomTabPanel value={value} index={0}>
+                  {leadsData ? (
+                    <div>
+                      <div className="mt-4">
+                        <div>
+                          <FilterFields />
+                        </div>
+                      </div>
+                      <div className="mt-5 ">
+                        <div>
+                          <CustomDatagrid
+                            leadNameSearch={onLeadGridSearch}
+                            leadsData={leadsData}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="mt-4">
+                        <div>
+                          <FilterFields />
+                        </div>
+                      </div>
+                      <div className="mt-5 ">
+                        <div>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              "& > :not(style)": {
+                                m: 1,
+                                width: "100%",
+                              },
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                flexDirection: "column",
+                                alignItems: "center",
+                              }}
+                            >
+                              <NextImage
+                                width={"500px"}
+                                src={"/images/no-data-img.svg"}
+                                alt={"no-data"}
+                                loading="lazy"
+                              />
+                              <div>
+                                <span>{"No Data Found"}</span>
+                              </div>
+                            </Box>
+                          </Box>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={1}>
+                  {leadsData ? (
+                    <div>
+                      <div className="mt-4">
+                        <div>
+                          <FilterFields />
+                        </div>
+                      </div>
+                      <div className="mt-5 ">
+                        <div>
+                          <CustomDatagrid
+                            leadNameSearch={onLeadGridSearch}
+                            leadsData={leadsData}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="mt-4">
+                        <div>
+                          <FilterFields />
+                        </div>
+                      </div>
+                      <div className="mt-5 ">
+                        <div>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              "& > :not(style)": {
+                                m: 1,
+                                width: "100%",
+                              },
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                flexDirection: "column",
+                                alignItems: "center",
+                              }}
+                            >
+                              <NextImage
+                                width={"500px"}
+                                src={"/images/no-data-img.svg"}
+                                alt={"no-data"}
+                                loading="lazy"
+                              />
+                              <div>
+                                <span>{"No Data Found"}</span>
+                              </div>
+                            </Box>
+                          </Box>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={2}>
+                  {leadsData ? (
+                    <div>
+                      <div className="mt-4">
+                        <div>
+                          <FilterFields />
+                        </div>
+                      </div>
+                      <div className="mt-5 ">
+                        <div>
+                          <CustomDatagrid
+                            leadNameSearch={onLeadGridSearch}
+                            leadsData={leadsData}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="mt-4">
+                        <div>
+                          <FilterFields />
+                        </div>
+                      </div>
+                      <div className="mt-5 ">
+                        <div>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              "& > :not(style)": {
+                                m: 1,
+                                width: "100%",
+                              },
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                flexDirection: "column",
+                                alignItems: "center",
+                              }}
+                            >
+                              <NextImage
+                                width={"500px"}
+                                src={"/images/no-data-img.svg"}
+                                alt={"no-data"}
+                                loading="lazy"
+                              />
+                              <div>
+                                <span>{"No Data Found"}</span>
+                              </div>
+                            </Box>
+                          </Box>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={3}>
+                  <div>
+                    <div className="mt-4">
+                      <div>
+                        <FilterFields />
+                      </div>
+                    </div>
+                    <div className="mt-5 ">
+                      <div>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            "& > :not(style)": {
+                              m: 1,
+                              width: "100%",
+                            },
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              flexDirection: "column",
+                              alignItems: "center",
+                            }}
+                          >
+                            <NextImage
+                              width={"500px"}
+                              src={"/images/no-data-img.svg"}
+                              alt={"no-data"}
+                              loading="lazy"
+                            />
+                            <div>
+                              <span>{"No Data Found"}</span>
+                            </div>
+                          </Box>
+                        </Box>
+                      </div>
+                    </div>
+                  </div>
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={4}>
+                  <div>
+                    <div className="mt-4">
+                      <div>
+                        <FilterFields />
+                      </div>
+                    </div>
+                    <div className="mt-5 ">
+                      <div></div>
+                    </div>
+                  </div>
+                </CustomTabPanel>
+              </Box>
             </div>
           </div>
         </div>
-        <div className="col-lg-6 col-md-12 col-sm-12 text-right">
-          <CustomDropdownBtn />
-        </div>
-      </div>
-      <div>
-        <div>
-          <Box>
-            <Tabs
-              allowScrollButtonsMobile
-              value={value}
-              onChange={handleChange}
-              variant={isSmallScreen ? "scrollable" : "standard"}
-              scrollButtons={isSmallScreen ? true : false}
-              aria-label="scrollable auto tabs example"
-              sx={{
-                "& .MuiButtonBase-root": { minHeight: "48px" },
-                "& .Mui-selected": {
-                  background: "#3ca2ff2e",
-                },
-                "& .Mui-selected svg": {
-                  fill: "#3CA2FF",
-                },
-              }}
-            >
-              <Tab
-                {...a11yProps(0)}
-                icon={<SnoozeIcon style={{ width: "20px", height: "20px" }} />}
-                label="Active"
-                iconPosition="start"
-                sx={{
-                  width: "150px",
-                  textTransform: "Capitalize",
-                  borderBottom: 1,
-                  borderColor: "divider",
-                }}
-                onClick={() => {
-                  router.push({ query: { isActive: "true" } });
-                  setValue(0);
-                }}
-              />
-              <Tab
-                {...a11yProps(1)}
-                icon={<SnoozeIcon style={{ width: "20px", height: "20px" }} />}
-                iconPosition="start"
-                label="Snoozed"
-                onClick={() => {
-                  router.push({ query: { isSnoozed: "true" } });
-                  setValue(1);
-                }}
-                sx={{
-                  width: "150px",
-                  textTransform: "Capitalize",
-                  borderBottom: 1,
-                  borderColor: "divider",
-                }}
-              />
-              <Tab
-                {...a11yProps(2)}
-                icon={<ArchiveIcon style={{ width: "20px", height: "20px" }} />}
-                iconPosition="start"
-                label="Archived"
-                sx={{
-                  width: "150px",
-                  textTransform: "Capitalize",
-                  borderBottom: 1,
-                  borderColor: "divider",
-                }}
-                onClick={() => {
-                  router.push({ query: { isActive: "false" } });
-                  setValue(2);
-                }}
-              />
-              <Tab
-                {...a11yProps(3)}
-                icon={<WonIcon style={{ width: "30px", height: "30px" }} />}
-                iconPosition="start"
-                label="Won"
-                sx={{
-                  width: "150px",
-                  textTransform: "Capitalize",
-                  borderBottom: 1,
-                  borderColor: "divider",
-                }}
-              />
-              <Tab
-                {...a11yProps(4)}
-                icon={<LostIcon style={{ width: "30px", height: "30px" }} />}
-                iconPosition="start"
-                label="Lost"
-                sx={{
-                  width: "150px",
-                  textTransform: "Capitalize",
-                  borderBottom: 1,
-                  borderColor: "divider",
-                }}
-              />
-            </Tabs>
-
-            <CustomTabPanel value={value} index={0}>
-              {leadsData ? (
-                <div>
-                  <div className="mt-4">
-                    <div>
-                      <FilterFields />
-                    </div>
-                  </div>
-                  <div className="mt-5 ">
-                    <div>
-                      <CustomDatagrid
-                        leadNameSearch={onLeadGridSearch}
-                        leadsData={leadsData}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <div className="mt-4">
-                    <div>
-                      <FilterFields />
-                    </div>
-                  </div>
-                  <div className="mt-5 ">
-                    <div>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          "& > :not(style)": {
-                            m: 1,
-                            width: "100%",
-                          },
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
-                          <NextImage
-                            width={"500px"}
-                            src={"/images/no-data-img.svg"}
-                            alt={"no-data"}
-                            loading="lazy"
-                          />
-                          <div>
-                            <span>{"No Data Found"}</span>
-                          </div>
-                        </Box>
-                      </Box>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={1}>
-              {leadsData ? (
-                <div>
-                  <div className="mt-4">
-                    <div>
-                      <FilterFields />
-                    </div>
-                  </div>
-                  <div className="mt-5 ">
-                    <div>
-                      <CustomDatagrid
-                        leadNameSearch={onLeadGridSearch}
-                        leadsData={leadsData}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <div className="mt-4">
-                    <div>
-                      <FilterFields />
-                    </div>
-                  </div>
-                  <div className="mt-5 ">
-                    <div>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          "& > :not(style)": {
-                            m: 1,
-                            width: "100%",
-                          },
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
-                          <NextImage
-                            width={"500px"}
-                            src={"/images/no-data-img.svg"}
-                            alt={"no-data"}
-                            loading="lazy"
-                          />
-                          <div>
-                            <span>{"No Data Found"}</span>
-                          </div>
-                        </Box>
-                      </Box>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={2}>
-              {leadsData ? (
-                <div>
-                  <div className="mt-4">
-                    <div>
-                      <FilterFields />
-                    </div>
-                  </div>
-                  <div className="mt-5 ">
-                    <div>
-                      <CustomDatagrid
-                        leadNameSearch={onLeadGridSearch}
-                        leadsData={leadsData}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <div className="mt-4">
-                    <div>
-                      <FilterFields />
-                    </div>
-                  </div>
-                  <div className="mt-5 ">
-                    <div>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          "& > :not(style)": {
-                            m: 1,
-                            width: "100%",
-                          },
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
-                          <NextImage
-                            width={"500px"}
-                            src={"/images/no-data-img.svg"}
-                            alt={"no-data"}
-                            loading="lazy"
-                          />
-                          <div>
-                            <span>{"No Data Found"}</span>
-                          </div>
-                        </Box>
-                      </Box>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={3}>
-              <div>
-                <div className="mt-4">
-                  <div>
-                    <FilterFields />
-                  </div>
-                </div>
-                <div className="mt-5 ">
-                  <div>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        "& > :not(style)": {
-                          m: 1,
-                          width: "100%",
-                        },
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          flexDirection: "column",
-                          alignItems: "center",
-                        }}
-                      >
-                        <NextImage
-                          width={"500px"}
-                          src={"/images/no-data-img.svg"}
-                          alt={"no-data"}
-                          loading="lazy"
-                        />
-                        <div>
-                          <span>{"No Data Found"}</span>
-                        </div>
-                      </Box>
-                    </Box>
-                  </div>
-                </div>
-              </div>
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={4}>
-              <div>
-                <div className="mt-4">
-                  <div>
-                    <FilterFields />
-                  </div>
-                </div>
-                <div className="mt-5 ">
-                  <div></div>
-                </div>
-              </div>
-            </CustomTabPanel>
-          </Box>
-        </div>
-      </div>
-    </div>
+      {/* )} */}
+    </>
   );
 }

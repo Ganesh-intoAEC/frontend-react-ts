@@ -121,6 +121,7 @@ const rows: Row[] = [
 
 export default function CustomDatagrid({
   leadsData,
+  leadNameSearch
 }: MasterGridNavigationTypes) {
   // const [page] = React.useState(0);
   const [rowsPerPage] = React.useState(5);
@@ -128,45 +129,36 @@ export default function CustomDatagrid({
   const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
   const [orderBy, setOrderBy] = React.useState<Column | "">("");
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
+  const [hoveredRow, setHoveredRow] = React.useState<number | null>(null);
+  const [isRowSelected, setIsRowSelected] = React.useState<boolean | null>(false);
+  const [rowStageModal, setRowStageModal] = React.useState(false);
+  const [rowStageSelected, setRowStageSelected] = React.useState("");
 
- 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  // const [data, setData] = React.useState<any | null>(null);
-  // Initialize useFetch with your API base URL
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const { post, response, loading, error } = useFetch(
-  //   "https://dev-leadmanager.aecmultiverse.com"
-  // );
-
-  // React.useEffect(() => {
-  //   fetchLead();
-  // }, []);
-
-  // async function fetchLead() {
-  //   const responseData = await post('/fetch', {
-  //     eventType: 'GET_LEAD_BY_ID',
-  //     leadId: 'd19ddf1e-054d-4ceb-a983-e7dfa014cd25',
-  //   });
-
-  //   if (response.ok) {
-  //     setData(responseData);
-  //     console.log(responseData);
-  //   } else {
-  //     console.error('Error fetching data:', responseData);
-  //   }
-  // }
+  
 
   // const [selectedDropdownValue, setSelectedDropdownValue] =
   //   React.useState("New");
 
-  const [hoveredRow, setHoveredRow] = React.useState<number | null>(null);
 
-  const [isRowSelected, setIsRowSelected] = React.useState<boolean | null>(
-    false
-  );
+  //Date format convert from string 
+  const formatDate = (timestampString: string): string => {
+    const timestamp: number = parseInt(timestampString, 10);
+    const date: Date = new Date(timestamp);
+  
+    const day: string = String(date.getDate()).padStart(2, '0');
+    const month: string = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year: number = date.getFullYear();
+  
+    return `${day}-${month}-${year}`;
+  };
 
-  const [rowStageModal, setRowStageModal] = React.useState(false);
-  const [rowStageSelected, setRowStageSelected] = React.useState("");
+  //Amount format convert from string 
+  const formatAmount = (amountString: string): string =>{
+    const amountNumber = parseFloat(amountString); // Convert to a number if it's a string
+  const formattedAmount = amountNumber.toLocaleString('en-IN'); // Use 'en-IN' locale for Indian number formatting
+  return formattedAmount
+ 
+  };
 
   const handleRowHover = (rowIndex: number) => {
     setHoveredRow(rowIndex);
@@ -269,8 +261,16 @@ export default function CustomDatagrid({
   const rowStageModalClose = () => {
     setRowStageModal(false);
   };
-  // row selected action
+  
 
+  //grid master search
+  const onLeadGridSearch = (leadName: string) => {    
+    if (leadName.length >= 3) {
+      console.log(leadName);
+       leadNameSearch(leadName);
+    }
+  };
+  
   // const handleChangePage = (event: unknown, newPage: number) => {
   //   setPage(newPage);
   // };
@@ -288,6 +288,7 @@ export default function CustomDatagrid({
         <GridSearchExport
           isRowSelected={isRowSelected}
           rowSelectedStage={rowSelectedStage}
+          leadNameSearch={onLeadGridSearch}
         />
       </div>
       <div>
@@ -514,9 +515,9 @@ export default function CustomDatagrid({
                     </Stack>
                   </TableCell>
 
-                  <TableCell align="center">{lead.createdAt}</TableCell>
+                  <TableCell align="center">{formatDate(lead.createdAt)}</TableCell>
                   <TableCell align="center">
-                    {lead.estimatedRevenueFromLead}
+                    {formatAmount(lead.estimatedProfitFromLead)}
                   </TableCell>
 
                   {hoveredRow === rowIndex && (

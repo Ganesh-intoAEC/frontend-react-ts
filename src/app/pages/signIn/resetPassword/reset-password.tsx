@@ -1,4 +1,7 @@
-import React, { useState, useMemo, useCallback } from "react";
+import NextImage from "@/app/components/NextImage";
+import CloseIcon from "@/assets/icons/close-icon";
+import TickIcon from "@/assets/icons/tick-icon";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -10,12 +13,8 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import router from "next/router";
-import CloseIcon from "@/assets/icons/close-icon";
-import TickIcon from "@/assets/icons/tick-icon";
-import Image from 'next/image'
-
+import { useCallback, useMemo, useState } from "react";
 
 const ResetPassword = () => {
   const isSmallScreen = useMediaQuery("(min-width: 990.95px)");
@@ -298,9 +297,9 @@ const ResetPassword = () => {
               </Box>
               {isSmallScreen && (
                 <Box className="col-lg-7 d-flex justify-content-center align-items-center px-2">
-                  <Image
+                  <NextImage
+                    width={"300px"}
                     src={"/images/reset-passwordImg.svg"}
-                    style={{ width: "300px", height: "auto" }}
                     alt={"reset-passwordImg"}
                     loading="lazy"
                   />

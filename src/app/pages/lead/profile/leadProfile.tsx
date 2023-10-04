@@ -1,11 +1,14 @@
-import Box from "@mui/material/Box";
-import LeadProfileCard from "./_leadProfileCard";
+import NextImage from "@/app/components/NextImage";
+import CallIcon from "@/assets/icons/Call-icon";
+import DatepickerIcon from "@/assets/icons/datepicker-icon";
+import NoteIcon from "@/assets/icons/note-icon";
+import NotepadPenIcon from "@/assets/icons/notepadPen-icon";
+import PlusChatIcon from "@/assets/icons/plusChat-icon";
+import PlusSquareIcon from "@/assets/icons/plusSquare-icon";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import IconButton from "@mui/material/IconButton";
-import WonIcon from "../../../../assets/icons/won-icon";
 import {
   Button,
-   Dialog,
+  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -17,25 +20,21 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import LostIcon from "../../../../assets/icons/lost-icon";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import React from "react";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useRouter } from "next/router";
-import NotepadPenIcon from "@/assets/icons/notepadPen-icon";
-import DatepickerIcon from "@/assets/icons/datepicker-icon";
-import PlusSquareIcon from "@/assets/icons/plusSquare-icon";
-import CallIcon from "@/assets/icons/Call-icon";
-import NoteIcon from "@/assets/icons/note-icon";
-import PlusChatIcon from "@/assets/icons/plusChat-icon";
-import CallLog from "./_callLog";
-import Notes from "./_notes";
+import React from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import LostIcon from "../../../../assets/icons/lost-icon";
+import WonIcon from "../../../../assets/icons/won-icon";
 import ActivityLog from "./_activityLog";
-import Image from 'next/image'
+import CallLog from "./_callLog";
+import LeadProfileCard from "./_leadProfileCard";
+import Notes from "./_notes";
 
- 
 const LeadProfile: React.FC = () => {
   const [leadStatus, setLeadStatus] = React.useState("New");
   const [leadStatusModal, setleadStatusModal] = React.useState(false);
@@ -271,120 +270,114 @@ const LeadProfile: React.FC = () => {
           </div>
 
           <div className="col-lg-9 col-md-12 px-2">
-        
-              <Box
-             
-              >
-                <CustomTabPanel  value={value} index={0}>
-                  <div>
-                  <div className="mb-5">
-                     <Typography variant="h4">{'Questionnaire'}</Typography>
-                    </div>
-                  <Image
-                      src={"/images/Coming soon page img.svg"}
-                      style={{ width: "280px", height: "auto" }}
-                      alt={"Coming soon page"}
-                      loading="lazy"
-                    />
-                    <div className="text-center">
-                      <span>{"Coming Soon..."}</span>
-                    </div>
-                  </div>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
+            <Box>
+              <CustomTabPanel value={value} index={0}>
                 <div>
                   <div className="mb-5">
-                     <Typography variant="h4">{'Proposal'}</Typography>
-                    </div>
-                  <Image
-                      src={"/images/Coming soon page img.svg"}
-                      style={{ width: "280px", height: "auto" }}
-                      alt={"Coming soon page"}
-                      loading="lazy"
-                    />
-                    <div className="text-center">
-                      <span>{"Coming Soon..."}</span>
-                    </div>
+                    <Typography variant="h4">{"Questionnaire"}</Typography>
                   </div>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={2}>
-                  <div>
-                    <Image
-                      src={"/images/Coming soon page img.svg"}
-                      style={{ width: "280px", height: "auto" }}
-                      alt={"Coming soon page"}
-                      loading="lazy"
-                    />
-                    <div>
-                      <span>{"Coming Soon..."}</span>
-                    </div>
+                  <NextImage
+                    src={"/images/Coming soon page img.svg"}
+                    alt={"Coming soon page"}
+                    width={"280px"}
+                    loading="lazy"
+                  />
+                  <div className="text-center">
+                    <span>{"Coming Soon..."}</span>
                   </div>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={3}>
-                  <div>
-                    <div className="mt-4">
-                      <div>
-                        event
-                      </div>
-                    </div>
-                    <div className="mt-5 ">
-                      <div></div>
-                    </div>
+                </div>
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={1}>
+                <div>
+                  <div className="mb-5">
+                    <Typography variant="h4">{"Proposal"}</Typography>
                   </div>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={4}>
-                  <div>
-                    <div className="mt-4">
-                      <div>communication</div>
-                    </div>
-                    <div className="mt-5 ">
-                      <div></div>
-                    </div>
+                  <NextImage
+                    width={"280px"}
+                    src={"/images/Coming soon page img.svg"}
+                    alt={"Coming soon page"}
+                    loading="lazy"
+                  />
+                  <div className="text-center">
+                    <span>{"Coming Soon..."}</span>
                   </div>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={5}>
+                </div>
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={2}>
+                <div>
+                  <NextImage
+                    width={"280px"}
+                    src={"/images/Coming soon page img.svg"}
+                    alt={"Coming soon page"}
+                    loading="lazy"
+                  />
                   <div>
-                    <div className="mt-4">
-                      <div>file Upload</div>
-                    </div>
-                    <div className="mt-5 ">
-                      <div></div>
-                    </div>
+                    <span>{"Coming Soon..."}</span>
                   </div>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={6}>
-                  <div>
-                    <div className="mt-4">
+                </div>
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={3}>
+                <div>
+                  <div className="mt-4">
+                    <div>event</div>
+                  </div>
+                  <div className="mt-5 ">
+                    <div></div>
+                  </div>
+                </div>
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={4}>
+                <div>
+                  <div className="mt-4">
+                    <div>communication</div>
+                  </div>
+                  <div className="mt-5 ">
+                    <div></div>
+                  </div>
+                </div>
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={5}>
+                <div>
+                  <div className="mt-4">
+                    <div>file Upload</div>
+                  </div>
+                  <div className="mt-5 ">
+                    <div></div>
+                  </div>
+                </div>
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={6}>
+                <div>
+                  <div className="mt-4">
                     {/* <TwoCardLayout/> */}
-                    <CallLog/>
-                    </div>
-                    <div className="mt-5 ">
-                      <div></div>
-                    </div>
+                    <CallLog />
                   </div>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={7}>
-                  <div>
-                    <div className=" ">
-                      <Notes/>
-                    </div>
-                    <div className="mt-5 ">
-                      <div></div>
-                    </div>
+                  <div className="mt-5 ">
+                    <div></div>
                   </div>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={8}>
-                  <div>
-                    <div className="mt-4">
-                      <ActivityLog/>
-                    </div>
-                    <div className="mt-5 ">
-                      <div></div>
-                    </div>
+                </div>
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={7}>
+                <div>
+                  <div className=" ">
+                    <Notes />
                   </div>
-                </CustomTabPanel>
-              </Box>
-        
+                  <div className="mt-5 ">
+                    <div></div>
+                  </div>
+                </div>
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={8}>
+                <div>
+                  <div className="mt-4">
+                    <ActivityLog />
+                  </div>
+                  <div className="mt-5 ">
+                    <div></div>
+                  </div>
+                </div>
+              </CustomTabPanel>
+            </Box>
           </div>
         </div>
       </div>

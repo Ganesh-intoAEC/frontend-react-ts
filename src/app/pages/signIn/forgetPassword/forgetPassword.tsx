@@ -1,48 +1,40 @@
 import React from "react";
 
-import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
-import { Typography, useMediaQuery } from "@mui/material";
-import {
-  Button
-} from "@mui/material";
+import { Button, Typography, useMediaQuery } from "@mui/material";
 
+import NextImage from "@/app/components/NextImage";
 import router from "next/router";
 import { ToastContainer, toast } from "react-toastify";
-import Image from 'next/image'
-
 
 const ForgotPassword: React.FC = () => {
   const isSmallScreen = useMediaQuery("(min-width: 990.95px)");
-  const [isValidEmail,setIsValidEmail] = React.useState(false);
-  const [sendBtnClicked, setSendBtnClicked] = React.useState(false)
-    //form Data
-    const [formData, setFormData] = React.useState({
-      email: "",
-    });
+  const [isValidEmail, setIsValidEmail] = React.useState(false);
+  const [sendBtnClicked, setSendBtnClicked] = React.useState(false);
+  //form Data
+  const [formData, setFormData] = React.useState({
+    email: "",
+  });
 
   const handleSendClick = () => {
-    setSendBtnClicked(true)
-if(isValidEmail){
-  router.push('/signIn/resetPassword');
- 
-}
-else{
-  toast.error("Enter a Valid Email/Mobile Number ", { autoClose: 2500 });
-  return
-}
- 
-    
+    setSendBtnClicked(true);
+    if (isValidEmail) {
+      router.push("/signIn/resetPassword");
+    } else {
+      toast.error("Enter a Valid Email/Mobile Number ", { autoClose: 2500 });
+      return;
+    }
   };
 
   const handleChange = (name: string, value: string) => {
     const regx =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if(regx.test(String(value).toLowerCase())){
-      setIsValidEmail(true)
-    }else{
-      setIsValidEmail(false)
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (regx.test(String(value).toLowerCase())) {
+      setIsValidEmail(true);
+    } else {
+      setIsValidEmail(false);
     }
 
     setFormData((prevData) => ({
@@ -65,9 +57,7 @@ else{
         backgroundSize: "cover",
       }}
     >
-      <div
-        className="container signInUI mt-5 w-100 m-0"
-      >
+      <div className="container signInUI mt-5 w-100 m-0">
         <div className="row ">
           <div className=" col-lg-6 col-md-12 col-sm-12 mx-auto ">
             <Box
@@ -121,7 +111,7 @@ else{
                     fullWidth
                     sx={{ m: 1, color: "#000000" }}
                     helperText={
-                      (!isValidEmail && sendBtnClicked ) ? (
+                      !isValidEmail && sendBtnClicked ? (
                         <span style={{ color: "red" }}>
                           Enter a valid email address
                         </span>
@@ -131,7 +121,7 @@ else{
                     }
                   />
                 </Box>
-           
+
                 <Box className="my-2 text-center">
                   <Button
                     onClick={handleSendClick}
@@ -154,9 +144,9 @@ else{
               </Box>
               {isSmallScreen && (
                 <Box className="col-lg-7 px-2">
-                  <Image
+                  <NextImage
+                    width={"300px"}
                     src={"/images/forget-passwordImg.svg"}
-                    style={{ width: "300px", height: "auto" }}
                     alt={"forget-passwordImg"}
                     loading="lazy"
                   />

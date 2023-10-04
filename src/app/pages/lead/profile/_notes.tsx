@@ -32,6 +32,8 @@ import SelectIconDropdown from "@/app/components/singleSelectIconDropdown/single
  
 import { AvatarArr, LeadSources } from "@/app/constants/constant";
 import CustomDateRangePicker from "@/app/components/CustomDateRangePicker";
+import Image from 'next/image'
+
 
 interface CardProps {
   title: string;
@@ -437,9 +439,8 @@ function Notes() {
       {cards.length === 0 && (
             <div>
            
-            <img
+            <Image
                 src={"/images/no-data-found-1.svg"}
-                srcSet={"/images/no-data-found-1.svg"}
                 style={{ width: "100%", height: "auto" }}
                 alt={"logo"}
                 loading="lazy"

@@ -1,26 +1,28 @@
 {
-    // "env": {
-    //     "browser": true,
-    //     "commonjs": false,
-    //     "es2021": true
-    // },
-    "extends": [
-        "next",
-        "next/core-web-vitals",
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
-    // "parser": "@typescript-eslint/parser",
-    // "parserOptions": {
-    //     "ecmaVersion": "latest"
-    // },
-    // "plugins": [
-    //     "@typescript-eslint"
-    // ],
-    "rules": {
-        "jsx-a11y/alt-text": "off",
-        "react-hooks/exhaustive-deps":"off",
-        "react/no-unescaped-entities": "off"
-
-    }
+  // "env": {
+  //     "browser": true,
+  //     "commonjs": false,
+  //     "es2021": true
+  // },
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  // "parser": "@typescript-eslint/parser",
+  // "parserOptions": {
+  //     "ecmaVersion": "latest"
+  // },
+  // "plugins": [
+  //     "@typescript-eslint"
+  // ],
+  "rules": {
+    "jsx-a11y/alt-text": "off",
+    "jsx-uses-vars": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react/no-unescaped-entities": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any":"warn"
+  }
 }

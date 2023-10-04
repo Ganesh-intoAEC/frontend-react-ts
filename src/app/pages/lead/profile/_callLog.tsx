@@ -1,4 +1,12 @@
-import React, { useState } from "react";
+import CustomTablePagination from "@/app/components/customTablePagination/customTablePagination";
+import SelectIconDropdown from "@/app/components/singleSelectIconDropdown/singleSelectIconDropdown";
+import { AvatarArr, LeadSources } from "@/app/constants/constant";
+import CallIcon from "@/assets/icons/Call-icon";
+import CallincomingIcon from "@/assets/icons/call-incoming";
+import DeleteIcon from "@/assets/icons/delete-icon";
+import EditIcon from "@/assets/icons/edit-icon";
+import FilterIcon from "@/assets/icons/filter-icon";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   Autocomplete,
   Box,
@@ -18,21 +26,12 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import EditIcon from "@/assets/icons/edit-icon";
-import DeleteIcon from "@/assets/icons/delete-icon";
-import CallincomingIcon from "@/assets/icons/call-incoming";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import CallIcon from "@/assets/icons/Call-icon";
-import { AvatarArr, LeadSources } from "@/app/constants/constant";
-import FilterIcon from "@/assets/icons/filter-icon";
-import SelectIconDropdown from "@/app/components/singleSelectIconDropdown/singleSelectIconDropdown";
-import CustomTablePagination from "@/app/components/customTablePagination/customTablePagination";
+import React, { useState } from "react";
 
-import DatepickerIcon from "@/assets/icons/datepicker-icon";
-import { v4 as uuidv4 } from 'uuid';
 import CustomDateRangePicker from "@/app/components/CustomDateRangePicker";
-import Image from 'next/image'
-
+import NextImage from "@/app/components/NextImage";
+import DatepickerIcon from "@/assets/icons/datepicker-icon";
+import { v4 as uuidv4 } from "uuid";
 
 interface CallLog {
   id: string; // Use UUID as a unique identifier field
@@ -43,13 +42,13 @@ interface CallLog {
 }
 
 const dropdownStyle = {
-  '& .MuiPaper-root': {
-    width: '120px !important',
-    left: 'calc(100% - 150px) !important'
+  "& .MuiPaper-root": {
+    width: "120px !important",
+    left: "calc(100% - 150px) !important",
   },
-  '& .MuiTypography-root': {
-    fontSize: '13px'
-  }
+  "& .MuiTypography-root": {
+    fontSize: "13px",
+  },
 };
 
 export default function CallLog() {
@@ -89,42 +88,49 @@ export default function CallLog() {
   };
 
   const editCallLog = (id: string, updatedLog: CallLog) => {
-    const updatedLogs = callLogs.map(log => (log.id === id ? updatedLog : log));
+    const updatedLogs = callLogs.map((log) =>
+      log.id === id ? updatedLog : log
+    );
     setCallLogs(updatedLogs);
     handleEditDialogClose();
   };
 
-  const deleteCallLog = (idToDelete: string, e: React.MouseEvent<HTMLElement>) => {
-    const clickedId = e.currentTarget.getAttribute('id');
-    console.log('Clicked ID:', clickedId);
-    console.log('Before deletion - callLogs:', callLogs);
-    console.log('Before deletion - selectedLogs:', selectedLogs);
-  
+  const deleteCallLog = (
+    idToDelete: string,
+    e: React.MouseEvent<HTMLElement>
+  ) => {
+    const clickedId = e.currentTarget.getAttribute("id");
+    console.log("Clicked ID:", clickedId);
+    console.log("Before deletion - callLogs:", callLogs);
+    console.log("Before deletion - selectedLogs:", selectedLogs);
+
     // Filter out the log with the specified ID from callLogs
-    const updatedLogs = callLogs.filter(log => log.id !== idToDelete);
-  
+    const updatedLogs = callLogs.filter((log) => log.id !== idToDelete);
+
     // Update the callLogs state with the filtered logs
     setCallLogs(updatedLogs);
-  
+
     // Filter out the ID from selectedLogs
-    const updatedSelectedLogs = selectedLogs.filter(selectedId => selectedId !== idToDelete);
-  
+    const updatedSelectedLogs = selectedLogs.filter(
+      (selectedId) => selectedId !== idToDelete
+    );
+
     // Update the selectedLogs state with the filtered selectedLogs
     setSelectedLogs(updatedSelectedLogs);
-  
+
     // Close the menu
     handleClose();
   };
-  
-
 
   const deleteSelectedLogs = () => {
     // Use the IDs of selected call logs for filtering
-    const updatedLogs = callLogs.filter((_, index) => !selectedLogs.includes(callLogs[index].id));
+    const updatedLogs = callLogs.filter(
+      (_, index) => !selectedLogs.includes(callLogs[index].id)
+    );
     setCallLogs(updatedLogs);
     setSelectedLogs([]);
   };
-  
+
   const toggleSelectLog = (id: string) => {
     if (selectedLogs.includes(id)) {
       setSelectedLogs(selectedLogs.filter((i) => i !== id));
@@ -132,7 +138,6 @@ export default function CallLog() {
       setSelectedLogs([...selectedLogs, id]);
     }
   };
-  
 
   const handleAddDialogOpen = () => {
     setOpenAddDialog(true);
@@ -174,7 +179,8 @@ export default function CallLog() {
 
   const handleSaveEditedLog = () => {
     if (editedIndex !== null && editedValue && editedComment) {
-      editCallLog(callLogs[editedIndex].id, { // Use the ID from callLogs
+      editCallLog(callLogs[editedIndex].id, {
+        // Use the ID from callLogs
         id: callLogs[editedIndex].id,
         value: editedValue,
         comment: editedComment,
@@ -201,10 +207,12 @@ export default function CallLog() {
           <SelectIconDropdown dataArr={AvatarArr} label="Assigned to" />
         </div>
         <div className="col-lg-5 col-md-6 col-sm-12 pr-2">
-        <CustomDateRangePicker label={"Added on"} onApply={(st,end)=>{
-              console.log(st,end);
-              
-            }} />
+          <CustomDateRangePicker
+            label={"Added on"}
+            onApply={(st, end) => {
+              console.log(st, end);
+            }}
+          />
         </div>
         <div className="col-lg-2 col-md-6 col-sm-12 pr-2 text-right">
           <Button
@@ -264,9 +272,12 @@ export default function CallLog() {
       <div>
         {callLogs.map((log, index) => (
           <Card
-          id={log.id}
+            id={log.id}
             key={index}
-            sx={{ boxShadow: "0px 6px 18px 0px rgba(0, 0, 0, 0.06)", '& .MuiCardContent-root':{padding:'0'}  }}
+            sx={{
+              boxShadow: "0px 6px 18px 0px rgba(0, 0, 0, 0.06)",
+              "& .MuiCardContent-root": { padding: "0" },
+            }}
             className="mb-2 pt-1 pb-2"
           >
             <CardContent>
@@ -314,12 +325,19 @@ export default function CallLog() {
                       />
                       <span>{"Edit"}</span>
                     </MenuItem>
-                    <MenuItem id={log.id}  onClick={(e) => deleteCallLog(log.id, e)}>
+                    <MenuItem
+                      id={log.id}
+                      onClick={(e) => deleteCallLog(log.id, e)}
+                    >
                       <DeleteIcon
                         className="mr-1"
-                        style={{ width: "12px", height: "12px", fill: "#FF3C5F" }}
+                        style={{
+                          width: "12px",
+                          height: "12px",
+                          fill: "#FF3C5F",
+                        }}
                       />
-                      <span style={{color:'#FF3C5F'}}>{"Delete"}</span>
+                      <span style={{ color: "#FF3C5F" }}>{"Delete"}</span>
                     </MenuItem>
                   </Menu>
                 </Box>
@@ -391,16 +409,14 @@ export default function CallLog() {
           </Card>
         ))}
         {callLogs.length === 0 && (
-            <div>
-           
-            <Image
-                src={"/images/no-data-found-1.svg"}
-                style={{ width: "100%", height: "auto" }}
-                alt={"no-data"}
-                loading="lazy"
-              />
-               
-            </div>
+          <div>
+            <NextImage
+              width={"100%"}
+              src={"/images/no-data-found-1.svg"}
+              alt={"no-data"}
+              loading="lazy"
+            />
+          </div>
         )}
       </div>
       <div>
@@ -408,7 +424,11 @@ export default function CallLog() {
       </div>
 
       {/* Add Call Log Dialog */}
-      <Dialog open={openAddDialog} disableScrollLock onClose={handleAddDialogClose}>
+      <Dialog
+        open={openAddDialog}
+        disableScrollLock
+        onClose={handleAddDialogClose}
+      >
         <div className="text-center border-bottom">
           <DialogTitle className="underline-on-hover   my-2">
             Add Call Log
@@ -478,7 +498,11 @@ export default function CallLog() {
       </Dialog>
 
       {/* Edit Call Log Dialog */}
-      <Dialog open={openEditDialog} disableScrollLock onClose={handleEditDialogClose}>
+      <Dialog
+        open={openEditDialog}
+        disableScrollLock
+        onClose={handleEditDialogClose}
+      >
         <div className="text-center border-bottom">
           <DialogTitle className="underline-on-hover   my-2">
             Edit Call Log

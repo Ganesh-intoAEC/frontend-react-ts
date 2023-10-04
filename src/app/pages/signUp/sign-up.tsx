@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import { MenuItem, Typography, useMediaQuery } from "@mui/material";
+import NextImage from "@/app/components/NextImage";
+import { organiationTypes } from "@/app/constants/constant";
+import CloseIcon from "@/assets/icons/close-icon";
+import TickIcon from "@/assets/icons/tick-icon";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
   Checkbox,
@@ -10,17 +10,18 @@ import {
   FormControlLabel,
   InputAdornment,
   InputLabel,
+  MenuItem,
   OutlinedInput,
+  Typography,
+  useMediaQuery,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import router from "next/router";
-import CarouselSignup from "./carousel";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
 import { MuiTelInput } from "mui-tel-input";
-import TickIcon from "@/assets/icons/tick-icon";
-import CloseIcon from "@/assets/icons/close-icon";
-import { organiationTypes } from "@/app/constants/constant";
-import Image from 'next/image'
-
+import router from "next/router";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import CarouselSignup from "./carousel";
 
 const SignupCard: React.FC = () => {
   const isSmallScreen = useMediaQuery("(max-width: 990.95px)");
@@ -45,23 +46,23 @@ const SignupCard: React.FC = () => {
   const [passwordsMatch, setPasswordsMatch] = React.useState(true);
   const [invalidPassword, setInvalidPassword] = React.useState(false);
   const [showpasswordRule, setShowpasswordRule] = React.useState(false);
-//For Email OTP hide/show
+  //For Email OTP hide/show
   const [isEmailDisabled, setIsEmailDisabled] = React.useState(true);
   const [isEmailOTPDisabled, setIsEmailOTPDisabled] = React.useState(true);
-  const [showEmailOTPField, setShowEmailOTPField]= React.useState(false);
+  const [showEmailOTPField, setShowEmailOTPField] = React.useState(false);
   const [verifyEmailButtonText, setVerifyEmailButtonText] = useState("Verify");
 
   //For Mobile OTP hide/show
   const [isMobileDisabled, setIsMobileDisabled] = React.useState(true);
   const [isMobileOTPDisabled, setIsMobileOTPDisabled] = React.useState(true);
-  const [showMobileOTPField, setShowMobileOTPField]= React.useState(false);
-  const [verifyMobileButtonText, setVerifyMobileButtonText] = useState("Verify");
+  const [showMobileOTPField, setShowMobileOTPField] = React.useState(false);
+  const [verifyMobileButtonText, setVerifyMobileButtonText] =
+    useState("Verify");
 
   const [emailtimer, setEmailTimer] = useState<number | null>(null);
   const [mobiletimer, setMobileTimer] = useState<number | null>(null);
 
-  const [signupBtnClicked, setSignupBtnClicked] = React.useState(false)
-
+  const [signupBtnClicked, setSignupBtnClicked] = React.useState(false);
 
   // Timer duration (in seconds)
   const timerDuration = 60;
@@ -71,7 +72,7 @@ const SignupCard: React.FC = () => {
     if (showEmailOTPField) {
       // Start the timer when showEmailOTPField is true
       setEmailTimer(timerDuration);
-      setVerifyEmailButtonText("Verify")
+      setVerifyEmailButtonText("Verify");
       // Create an interval to decrement the timer
       const interval = setInterval(() => {
         setEmailTimer((prevTimer) => {
@@ -82,7 +83,7 @@ const SignupCard: React.FC = () => {
           }
           if (prevTimer === 1) {
             // Timer reached 0, reset and change button text
-            setVerifyEmailButtonText("Re-Verify")
+            setVerifyEmailButtonText("Re-Verify");
             clearInterval(interval);
             setIsEmailOTPDisabled(true);
             setShowEmailOTPField(false);
@@ -101,12 +102,11 @@ const SignupCard: React.FC = () => {
     }
   }, [showEmailOTPField]);
 
-  
   useEffect(() => {
     if (showMobileOTPField) {
       // Start the timer when showEmailOTPField is true
       setMobileTimer(timerDuration);
-      setVerifyMobileButtonText("Verify")
+      setVerifyMobileButtonText("Verify");
       // Create an interval to decrement the timer
       const interval = setInterval(() => {
         setMobileTimer((prevTimer) => {
@@ -117,7 +117,7 @@ const SignupCard: React.FC = () => {
           }
           if (prevTimer === 1) {
             // Timer reached 0, reset and change button text
-            setVerifyMobileButtonText("Re-Verify")
+            setVerifyMobileButtonText("Re-Verify");
             clearInterval(interval);
             setIsMobileOTPDisabled(true);
             setShowMobileOTPField(false);
@@ -134,7 +134,6 @@ const SignupCard: React.FC = () => {
         setMobileTimer(null);
       };
     }
-
   }, [showMobileOTPField]);
   const handleChange = (name: string, value: string | boolean) => {
     if (name === "mobileNumber") {
@@ -147,12 +146,17 @@ const SignupCard: React.FC = () => {
       setIsEmailDisabled(!re.test(String(value).toLowerCase()));
     }
     const regex = /^[0-9\b]+$/;
-    if (name === "emailOTP" && typeof value === "string" && value.length === 6 && regex.test(value)) {
+    if (
+      name === "emailOTP" &&
+      typeof value === "string" &&
+      value.length === 6 &&
+      regex.test(value)
+    ) {
       setIsEmailOTPDisabled(false);
     } else {
       setIsEmailOTPDisabled(true);
     }
-  
+
     if (name === "agreeTermsAndCondition") {
       setFormData((prevData) => ({
         ...prevData,
@@ -165,8 +169,6 @@ const SignupCard: React.FC = () => {
       }));
     }
   };
-  
-
 
   const checkLength = useMemo(
     () => password.length >= 8 && password.length <= 16,
@@ -209,7 +211,7 @@ const SignupCard: React.FC = () => {
   };
 
   const handleSignupClick = () => {
-    setSignupBtnClicked(true)
+    setSignupBtnClicked(true);
     if (password === newPassword) {
       const isPasswordValid =
         checkLength &&
@@ -242,9 +244,9 @@ const SignupCard: React.FC = () => {
           >
             <Box className="w-100 mt-5 px-2">
               <Box className="">
-                <Image
+                <NextImage
                   src={"/images/logo.png"}
-                  style={{ width: "250px", height: "auto" }}
+                  width={"250px"}
                   alt={"logo"}
                   loading="lazy"
                 />
@@ -268,10 +270,8 @@ const SignupCard: React.FC = () => {
                   InputLabelProps={{ shrink: true }}
                   fullWidth
                   helperText={
-                    (signupBtnClicked && formData.fullName === '') ? (
-                      <span style={{ color: "red" }}>
-                        Enter a Full name
-                      </span>
+                    signupBtnClicked && formData.fullName === "" ? (
+                      <span style={{ color: "red" }}>Enter a Full name</span>
                     ) : (
                       ""
                     )
@@ -291,7 +291,7 @@ const SignupCard: React.FC = () => {
                   fullWidth
                   value={formData.email}
                   helperText={
-                    (signupBtnClicked && formData.email === '') ? (
+                    signupBtnClicked && formData.email === "" ? (
                       <span style={{ color: "red" }}>
                         Verify the Email address
                       </span>
@@ -303,8 +303,19 @@ const SignupCard: React.FC = () => {
                     endAdornment: (
                       <Button
                         variant="contained"
-                        sx={{width:'125px',background:(verifyEmailButtonText==='Verify') ? "#3CA2FF " : "#F7685B ",'&:hover': {
-                          background: (verifyEmailButtonText === 'Verify') ? "#3398E6" : "#F65A4A", },}}
+                        sx={{
+                          width: "125px",
+                          background:
+                            verifyEmailButtonText === "Verify"
+                              ? "#3CA2FF "
+                              : "#F7685B ",
+                          "&:hover": {
+                            background:
+                              verifyEmailButtonText === "Verify"
+                                ? "#3398E6"
+                                : "#F65A4A",
+                          },
+                        }}
                         onClick={() => {
                           if (!isEmailDisabled && !showEmailOTPField) {
                             // Start the timer and show email OTP field
@@ -314,44 +325,52 @@ const SignupCard: React.FC = () => {
                         // Disable the button if isDisabled is true or the timer is active
                         disabled={isEmailDisabled || emailtimer !== null}
                       >
-                  {verifyEmailButtonText}
+                        {verifyEmailButtonText}
                       </Button>
                     ),
                   }}
                   disabled={showEmailOTPField}
                 />
-                { emailtimer === null ? '': <p style={{color:'#F7685B'}}>{`Please enter verification code sent to your inbox. Your code will expire in 00:${emailtimer}`}</p>}
+                {emailtimer === null ? (
+                  ""
+                ) : (
+                  <p
+                    style={{ color: "#F7685B" }}
+                  >{`Please enter verification code sent to your inbox. Your code will expire in 00:${emailtimer}`}</p>
+                )}
               </Box>
-              {showEmailOTPField &&(<Box className="my-3 ">
-                <TextField
-                  placeholder="Enter your OTP  "
-                  name="emailOTP"
-                  InputLabelProps={{ shrink: true }}
-                  onChange={(e) => handleChange("emailOTP", e.target.value)}
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          // Handle the verification logic here
-                          // This can be triggered when the "Verify" button is clicked
-                          // You can access the email value from the 'email' state
-                          if (!isEmailOTPDisabled) {
-                            // Perform the verification action
-                            // Example: send a verification email
-                          }
-                        }}
-                        // Disable the button if isDisabled is true
-                        disabled={isEmailOTPDisabled}
-                      >
-                        Submit
-                      </Button>
-                    ),
-                  }}
-                />
-              </Box>)}
+              {showEmailOTPField && (
+                <Box className="my-3 ">
+                  <TextField
+                    placeholder="Enter your OTP  "
+                    name="emailOTP"
+                    InputLabelProps={{ shrink: true }}
+                    onChange={(e) => handleChange("emailOTP", e.target.value)}
+                    fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {
+                            // Handle the verification logic here
+                            // This can be triggered when the "Verify" button is clicked
+                            // You can access the email value from the 'email' state
+                            if (!isEmailOTPDisabled) {
+                              // Perform the verification action
+                              // Example: send a verification email
+                            }
+                          }}
+                          // Disable the button if isDisabled is true
+                          disabled={isEmailOTPDisabled}
+                        >
+                          Submit
+                        </Button>
+                      ),
+                    }}
+                  />
+                </Box>
+              )}
               <Box className="my-3  ">
                 <MuiTelInput
                   label={
@@ -367,7 +386,7 @@ const SignupCard: React.FC = () => {
                     handleChange("mobileNumber", newPhone)
                   }
                   helperText={
-                    (signupBtnClicked && formData.mobileNumber === '') ? (
+                    signupBtnClicked && formData.mobileNumber === "" ? (
                       <span style={{ color: "red" }}>
                         Verify the Mobile number
                       </span>
@@ -380,8 +399,19 @@ const SignupCard: React.FC = () => {
                     endAdornment: (
                       <Button
                         variant="contained"
-                        sx={{width:'135px',background:(verifyMobileButtonText==='Verify') ? "#3CA2FF " : "#F7685B ", '&:hover': {
-                          background: (verifyMobileButtonText === 'Verify') ? "#3398E6" : "#F65A4A", },}}
+                        sx={{
+                          width: "135px",
+                          background:
+                            verifyMobileButtonText === "Verify"
+                              ? "#3CA2FF "
+                              : "#F7685B ",
+                          "&:hover": {
+                            background:
+                              verifyMobileButtonText === "Verify"
+                                ? "#3398E6"
+                                : "#F65A4A",
+                          },
+                        }}
                         onClick={() => {
                           if (!isMobileDisabled && !showMobileOTPField) {
                             // Start the timer and show email OTP field
@@ -391,44 +421,52 @@ const SignupCard: React.FC = () => {
                         // Disable the button if isDisabled is true or the timer is active
                         disabled={isMobileDisabled || mobiletimer !== null}
                       >
-                  {verifyMobileButtonText}
+                        {verifyMobileButtonText}
                       </Button>
                     ),
                   }}
                   disabled={showMobileOTPField}
                 />
-               { mobiletimer === null ? '': <p style={{color:'#F7685B'}}>{`Please enter verification code sent to your inbox. Your code will expire in 00:${mobiletimer}`}</p>}
+                {mobiletimer === null ? (
+                  ""
+                ) : (
+                  <p
+                    style={{ color: "#F7685B" }}
+                  >{`Please enter verification code sent to your inbox. Your code will expire in 00:${mobiletimer}`}</p>
+                )}
               </Box>
-              {showMobileOTPField &&(<Box className="my-3 ">
-                <TextField
-                  placeholder="Enter your OTP  "
-                  name="mobileOTP"
-                  InputLabelProps={{ shrink: true }}
-                  onChange={(e) => handleChange("mobileOTP", e.target.value)}
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          // Handle the verification logic here
-                          // This can be triggered when the "Verify" button is clicked
-                          // You can access the email value from the 'email' state
-                          if (!isMobileOTPDisabled) {
-                            // Perform the verification action
-                            // Example: send a verification email
-                          }
-                        }}
-                        // Disable the button if isDisabled is true
-                        disabled={isMobileOTPDisabled}
-                      >
-                        Submit
-                      </Button>
-                    ),
-                  }}
-                />
-              </Box>)}
+              {showMobileOTPField && (
+                <Box className="my-3 ">
+                  <TextField
+                    placeholder="Enter your OTP  "
+                    name="mobileOTP"
+                    InputLabelProps={{ shrink: true }}
+                    onChange={(e) => handleChange("mobileOTP", e.target.value)}
+                    fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {
+                            // Handle the verification logic here
+                            // This can be triggered when the "Verify" button is clicked
+                            // You can access the email value from the 'email' state
+                            if (!isMobileOTPDisabled) {
+                              // Perform the verification action
+                              // Example: send a verification email
+                            }
+                          }}
+                          // Disable the button if isDisabled is true
+                          disabled={isMobileOTPDisabled}
+                        >
+                          Submit
+                        </Button>
+                      ),
+                    }}
+                  />
+                </Box>
+              )}
               <Box className="col-lg-12 row">
                 <Box className=" col-lg-6 col-md-12 col-sm-12 mb-2 d-flex rounded">
                   {" "}
@@ -444,10 +482,10 @@ const SignupCard: React.FC = () => {
                     fullWidth
                     value={formData.organizationName}
                     onChange={(e) =>
-                      handleChange("organizationName",  e.target.value)
+                      handleChange("organizationName", e.target.value)
                     }
                     helperText={
-                      (signupBtnClicked && formData.organizationName === '') ? (
+                      signupBtnClicked && formData.organizationName === "" ? (
                         <span style={{ color: "red" }}>
                           Enter Organization name
                         </span>
@@ -468,7 +506,7 @@ const SignupCard: React.FC = () => {
                         <span style={{ color: "red" }}>*</span>
                       </span>
                     }
-                    sx={{textAlign:'left'}}
+                    sx={{ textAlign: "left" }}
                     placeholder="Select Organization type"
                     InputLabelProps={{ shrink: true }}
                     value={formData.organizationType}
@@ -479,7 +517,7 @@ const SignupCard: React.FC = () => {
                       MenuProps: { disableScrollLock: true },
                     }}
                     helperText={
-                      (signupBtnClicked && formData.organizationType === '') ? (
+                      signupBtnClicked && formData.organizationType === "" ? (
                         <span style={{ color: "red" }}>
                           Select Organization type
                         </span>
@@ -623,28 +661,33 @@ const SignupCard: React.FC = () => {
                 sx={{ "& .MuiTypography-root": { fontSize: "11px" } }}
               >
                 {!passwordsMatch && (
-                  <span  style={{fontSize:'11px', color:'#ff0000'}} >
+                  <span style={{ fontSize: "11px", color: "#ff0000" }}>
                     Passwords do not match. Please try again.
                   </span>
                 )}
                 {/* Helper text for invalid password */}
                 {invalidPassword && (
-                  <span style={{fontSize:'11px', color:'#ff0000'}}  >
+                  <span style={{ fontSize: "11px", color: "#ff0000" }}>
                     Password does not meet the criteria.
                   </span>
                 )}
               </Box>
               <Box className="d-flex justify-content-between">
-              
                 <FormControlLabel
-                control={<Checkbox checked={formData.agreeTermsAndCondition} onChange={(e) => handleChange("agreeTermsAndCondition", e.target.checked)} />}
+                  control={
+                    <Checkbox
+                      checked={formData.agreeTermsAndCondition}
+                      onChange={(e) =>
+                        handleChange("agreeTermsAndCondition", e.target.checked)
+                      }
+                    />
+                  }
                   sx={{
                     "& .MuiTypography-root": {
                       fontSize: "10px",
                     },
                   }}
                   name="agreeTermsAndCondition"
-               
                   label={
                     <span>
                       I accept our and Privacy Policy{" "}
@@ -654,10 +697,13 @@ const SignupCard: React.FC = () => {
                     </span>
                   }
                 />
-                   
               </Box>
-              {(signupBtnClicked && formData.agreeTermsAndCondition === false) && (
-                  <p className="text-left" style={{fontSize:'11px', color:'#ff0000'}}  >
+              {signupBtnClicked &&
+                formData.agreeTermsAndCondition === false && (
+                  <p
+                    className="text-left"
+                    style={{ fontSize: "11px", color: "#ff0000" }}
+                  >
                     Please check to procceed
                   </p>
                 )}

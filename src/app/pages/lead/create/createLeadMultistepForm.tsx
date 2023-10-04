@@ -8,8 +8,8 @@ import {
   StepLabel,
   Stepper,
   TextField,
-  Typography,
 } from "@mui/material";
+import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -108,7 +108,7 @@ const CreateLeadForm: React.FC = () => {
       if (activeStep === steps.length - 1) {
         // Handle form submission here
         console.log("Form submitted:", formData);
-        push("/leads/master");
+        push("/leads/master?isActive=true");
       } else {
         setActiveStep((prevStep) => prevStep + 1);
       }

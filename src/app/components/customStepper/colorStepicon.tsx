@@ -1,6 +1,6 @@
 import React from 'react';
 import { StepIconProps, Typography } from '@mui/material';
-import {styled} from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 

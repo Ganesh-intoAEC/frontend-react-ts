@@ -18,6 +18,8 @@ import ArchiveTextIcon from "../../../../assets/icons/archivedText-icon";
 import SnoozeTextIcon from "../../../../assets/icons/snoozedText-icon";
 import SelectIconDropdown from "../../../components/singleSelectIconDropdown/singleSelectIconDropdown";
 import { AvatarArr } from "../../../constants/constant";
+import Image from 'next/image'
+
 
 interface Data {
   leadName: string;
@@ -313,7 +315,7 @@ const LeadProfileCard: React.FC<LeadProfileCardProps> = ({
                      <div className="col-lg-12 row justify-content-between">
                         <div className="col-lg-4 ml-2 d-flex justify-content-start">
                         {LeadCurrentStatus === "Won" && (
-                          <img
+                          <Image
                             src={"/images/won.gif"}
                             alt="Won-Lead"
                             style={{
@@ -322,10 +324,11 @@ const LeadProfileCard: React.FC<LeadProfileCardProps> = ({
                               objectFit: "cover",
                               transform: 'scale(2.5)'
                             }}
+                            loading="lazy"
                           />
                         )}
                         {LeadCurrentStatus === "Lost" && (
-                          <img
+                          <Image
                             src={"/images/lost.gif"}
                             alt="Won-Lead"
                             style={{
@@ -334,6 +337,7 @@ const LeadProfileCard: React.FC<LeadProfileCardProps> = ({
                               objectFit: "cover",
                               transform: 'scale(2.5)'
                             }}
+                            loading="lazy"
                           />
                         )}
                         </div>

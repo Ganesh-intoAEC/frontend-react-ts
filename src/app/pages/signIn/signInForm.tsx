@@ -96,12 +96,12 @@ const SignInCard: React.FC = () => {
                       </span>
                     }
                     placeholder="Enter your email"
-                    inputRef={(input) => input && input.focus()}
                     InputLabelProps={{ shrink: true }}
                     fullWidth
                     onChange={(e) => {
                       setUsername(e.target.value);
                     }}
+                    value={username}
                     sx={{
                       m: 1,
                       color: "#000000",
@@ -137,6 +137,7 @@ const SignInCard: React.FC = () => {
                       onChange={(e) => {
                         setPassword(e.target.value);
                       }}
+                      value={password}
                       endAdornment={
                         <InputAdornment position="end">
                           <IconButton

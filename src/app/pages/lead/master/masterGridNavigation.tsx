@@ -93,41 +93,16 @@ function a11yProps(index: number) {
 
 export interface MasterGridNavigationTypes {
   leadsData: Array<LeadsTypes> | null | undefined;
+  leadNameSearch : (leadName: string) => void;
 }
 
 export default function MasterGridNavigation({
   leadsData,
+  leadNameSearch
 }: MasterGridNavigationTypes) {
   const isSmallScreen = useMediaQuery("(max-width: 959.95px)");
   const router = useRouter();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isActiveData, setActiveData] = React.useState<unknown | null>(null);
-
-  // const { post, response } = useFetch(
-  //   "https://dev-leadmanager.aecmultiverse.com"
-  // );
-
-  //Get Leads Active API
-  // React.useEffect(() => {
-  //   leadsActive();
-  // }, []);
-
-  // async function leadsActive() {
-  //   const leadsActiveData = await post('/fetch', {
-  //     "eventType": "GET_LEADS",
-  //     "leadOwnerId": "07edeeb1-c4da-41fd-a8ec-8014320b1ef6",
-  //     "filters": {
-  //         "organizationId": "d7d019ae-d059-46f6-b88e-d1e719bc1fe6",
-  //         "isActive":true
-  //     },
-  //   });
-  //   if (response.ok) {
-  //     setActiveData(leadsActiveData);
-  //     console.log(leadsActiveData);
-  //   } else {
-  //     console.error('Error fetching data:', leadsActiveData);
-  //   }
-  // }
+ 
 
   const [value, setValue] = React.useState(0);
 
@@ -158,6 +133,13 @@ export default function MasterGridNavigation({
     setValue(newValue);
   };
 
+  const onLeadGridSearch = (leadName: string) => {    
+  
+       leadNameSearch(leadName);
+
+  };
+  
+ 
   return (
     <div className="container mx-2 mt-5 pt-3">
       <div className="row mt-5 justify-content-between mb-1">
@@ -268,6 +250,10 @@ export default function MasterGridNavigation({
                   borderBottom: 1,
                   borderColor: "divider",
                 }}
+                onClick={() => {
+                  router.push({ query: { isActive: "false" } });
+                  setValue(2);
+                }}
               />
               <Tab
                 {...a11yProps(3)}
@@ -305,7 +291,7 @@ export default function MasterGridNavigation({
                   </div>
                   <div className="mt-5 ">
                     <div>
-                      <CustomDatagrid leadsData={leadsData} />
+                      <CustomDatagrid leadNameSearch={onLeadGridSearch} leadsData={leadsData} />
                     </div>
                   </div>
                 </div>
@@ -362,7 +348,7 @@ export default function MasterGridNavigation({
                   </div>
                   <div className="mt-5 ">
                     <div>
-                      <CustomDatagrid leadsData={leadsData} />
+                      <CustomDatagrid leadNameSearch={onLeadGridSearch}  leadsData={leadsData} />
                     </div>
                   </div>
                 </div>
@@ -410,46 +396,61 @@ export default function MasterGridNavigation({
               )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-              <div>
-                <div className="mt-4">
-                  <div>
-                    <FilterFields />
+            {leadsData ? (
+                <div>
+                  <div className="mt-4">
+                    <div>
+                      <FilterFields />
+                    </div>
+                  </div>
+                  <div className="mt-5 ">
+                    <div>
+                      <CustomDatagrid leadNameSearch={onLeadGridSearch}  leadsData={leadsData} />
+                    </div>
                   </div>
                 </div>
-                <div className="mt-5 ">
-                  <div>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        "& > :not(style)": {
-                          m: 1,
-                          width: "100%",
-                        },
-                      }}
-                    >
+              ) : (
+                <div>
+                  <div className="mt-4">
+                    <div>
+                      <FilterFields />
+                    </div>
+                  </div>
+                  <div className="mt-5 ">
+                    <div>
                       <Box
                         sx={{
                           display: "flex",
-                          justifyContent: "center",
-                          flexDirection: "column",
-                          alignItems: "center",
+                          flexWrap: "wrap",
+                          "& > :not(style)": {
+                            m: 1,
+                            width: "100%",
+                          },
                         }}
                       >
-                        <NextImage
-                          width={"500px"}
-                          src={"/images/waiting-to-search.svg"}
-                          alt={"waiting-to-search"}
-                          loading="lazy"
-                        />
-                        <div>
-                          <span>{"Waiting to search"}</span>
-                        </div>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                            alignItems: "center",
+                          }}
+                        >
+                          <NextImage
+                            width={"500px"}
+                            src={"/images/no-data-img.svg"}
+                            alt={"no-data"}
+                            loading="lazy"
+                          />
+                          <div>
+                            <span>{"No Data Found"}</span>
+                          </div>
+                        </Box>
                       </Box>
-                    </Box>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
               <div>

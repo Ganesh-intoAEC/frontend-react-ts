@@ -108,7 +108,7 @@ const CreateLeadForm: React.FC = () => {
       if (activeStep === steps.length - 1) {
         // Handle form submission here
         console.log("Form submitted:", formData);
-        push("/leads/master");
+        push("/leads/master?isActive=true");
       } else {
         setActiveStep((prevStep) => prevStep + 1);
       }

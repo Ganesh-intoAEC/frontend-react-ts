@@ -189,9 +189,9 @@ const SignInCard: React.FC = () => {
                         fontWeight: "600",
                         color: "#109CF1",
                       }}
-                      href="/signUp"
+                      href="auth/signUp"
                     >
-                      {"Sign Up"}
+                      {"Sign Up"} 
                     </Link>
                   </span>
                 </Box>

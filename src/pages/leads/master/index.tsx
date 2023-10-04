@@ -46,12 +46,9 @@
 // }
 
 // export default Home;
-import React, { useEffect, useState } from "react";
-import { useFetch } from "use-http";
 import { useRouter } from "next/router";
 
 import MasterGridNavigation from "../../../app/pages/lead/master/masterGridNavigation";
-import SkeletonMasterGrid from "@/app/pages/lead/master/skeleton";
 
 export interface LeadsTypes {
   leadId: string;

@@ -20,10 +20,11 @@ export default NextAuth({
             }),
           }
         ).then((res) => res.json());
+
         if (res && res.code == "USER_SIGNIN_SUCCESSFUL") {
           return { ...res.body, id: credentials?.username };
         } else {
-          return null;
+          throw new Error(res.message);
         }
       },
     }),
@@ -32,7 +33,7 @@ export default NextAuth({
     async jwt({ token, user }: any) {
       return { ...token, ...user };
     },
-    async session({ token, session }:any) {
+    async session({ token, session }: any) {
       session.user = token;
       return session;
     },
@@ -40,5 +41,6 @@ export default NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth/signIn",
+    error: "/auth/signIn",
   },
 });

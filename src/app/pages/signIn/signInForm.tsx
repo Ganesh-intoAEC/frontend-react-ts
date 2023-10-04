@@ -17,11 +17,10 @@ import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-
+import { toast } from "react-toastify";
 const SignInCard: React.FC = () => {
   const isSmallScreen = useMediaQuery("(max-width: 990.95px)");
   const [username, setUsername] = useState<string>();
-  const { data: session, status } = useSession();
   const [password, setPassword] = useState<string>();
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -35,12 +34,24 @@ const SignInCard: React.FC = () => {
   };
 
   const handleLogin = async () => {
-    if (password && username) {
-      await signIn("credentials", {
-        username,
-        password,
-        callbackUrl: "/dashboard",
-      });
+    try {
+      if (password && username) {
+        const user = await signIn("credentials", {
+          username,
+          password,
+          callbackUrl: "/dashboard",
+        });
+        if (user) {
+          toast.success("Signin successfull");
+        } else {
+          console.log("signin::::",user);
+          toast.error("Please check your credentials");
+        }
+      }
+    } catch (error: any) {
+      console.log("signin::::",error);
+      
+      toast.error(error?.message, { autoClose: 2500 });
     }
   };
 

@@ -4,22 +4,21 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import * as React from "react";
 
 // import ActiveIcon from '../../../assets/icons/active-user';
+import NextImage from "@/app/components/NextImage";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
-import { LeadsTypes } from "../../../../pages/leads/master";
-import CustomDropdownBtn from "../../../components/customDropdownBtn/customDropdownBtn";
+import { useRouter } from "next/router";
 import ArchiveIcon from "../../../../assets/icons/archive-icon";
 import LostIcon from "../../../../assets/icons/lost-icon";
 import SnoozeIcon from "../../../../assets/icons/snooze-icon";
 import WonIcon from "../../../../assets/icons/won-icon";
+import { LeadsTypes } from "../../../../pages/leads/master";
+import CustomDropdownBtn from "../../../components/customDropdownBtn/customDropdownBtn";
 import CustomDatagrid from "./_customDatagrid";
 import FilterFields from "./_filterFields";
-import { useRouter } from "next/router";
-import Image from 'next/image'
-
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -93,7 +92,7 @@ function a11yProps(index: number) {
 }
 
 export interface MasterGridNavigationTypes {
-  leadsData: Array<LeadsTypes> | null | undefined ;
+  leadsData: Array<LeadsTypes> | null | undefined;
 }
 
 export default function MasterGridNavigation({
@@ -237,9 +236,9 @@ export default function MasterGridNavigation({
                   borderBottom: 1,
                   borderColor: "divider",
                 }}
-                onClick={()=>{
-                  router.push({ query: { isActive: 'true' } });
-                  setValue(0)
+                onClick={() => {
+                  router.push({ query: { isActive: "true" } });
+                  setValue(0);
                 }}
               />
               <Tab
@@ -247,9 +246,9 @@ export default function MasterGridNavigation({
                 icon={<SnoozeIcon style={{ width: "20px", height: "20px" }} />}
                 iconPosition="start"
                 label="Snoozed"
-                onClick={()=>{
-                  router.push({ query: { isSnoozed: 'true' } });
-                  setValue(1)
+                onClick={() => {
+                  router.push({ query: { isSnoozed: "true" } });
+                  setValue(1);
                 }}
                 sx={{
                   width: "150px",
@@ -297,113 +296,117 @@ export default function MasterGridNavigation({
             </Tabs>
 
             <CustomTabPanel value={value} index={0}>
-            {leadsData ? (<div>
-                <div className="mt-4">
-                  <div>
-                    <FilterFields />
+              {leadsData ? (
+                <div>
+                  <div className="mt-4">
+                    <div>
+                      <FilterFields />
+                    </div>
+                  </div>
+                  <div className="mt-5 ">
+                    <div>
+                      <CustomDatagrid leadsData={leadsData} />
+                    </div>
                   </div>
                 </div>
-                <div className="mt-5 ">
-                  <div>
-                    <CustomDatagrid leadsData={leadsData} />
+              ) : (
+                <div>
+                  <div className="mt-4">
+                    <div>
+                      <FilterFields />
+                    </div>
+                  </div>
+                  <div className="mt-5 ">
+                    <div>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          "& > :not(style)": {
+                            m: 1,
+                            width: "100%",
+                          },
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                            alignItems: "center",
+                          }}
+                        >
+                          <NextImage
+                            width={"500px"}
+                            src={"/images/no-data-img.svg"}
+                            alt={"no-data"}
+                            loading="lazy"
+                          />
+                          <div>
+                            <span>{"No Data Found"}</span>
+                          </div>
+                        </Box>
+                      </Box>
+                    </div>
                   </div>
                 </div>
-              </div>):(
-                   <div>
-                   <div className="mt-4">
-                     <div>
-                       <FilterFields />
-                     </div>
-                   </div>
-                   <div className="mt-5 ">
-                     <div>
-                       <Box
-                         sx={{
-                           display: "flex",
-                           flexWrap: "wrap",
-                           "& > :not(style)": {
-                             m: 1,
-                             width: "100%",
-                           },
-                         }}
-                       >
-                         <Box
-                           sx={{
-                             display: "flex",
-                             justifyContent: "center",
-                             flexDirection: "column",
-                             alignItems: "center",
-                           }}
-                         >
-                           <Image
-                             src={"/images/no-data-img.svg"}
-                             style={{ width: "500px", height: "auto" }}
-                             alt={"no-data"}
-                             loading="lazy"
-                           />
-                           <div>
-                             <span>{"No Data Found"}</span>
-                           </div>
-                         </Box>
-                       </Box>
-                     </div>
-                   </div>
-                 </div>
               )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-              {leadsData ? (<div>
-                <div className="mt-4">
-                  <div>
-                    <FilterFields />
+              {leadsData ? (
+                <div>
+                  <div className="mt-4">
+                    <div>
+                      <FilterFields />
+                    </div>
+                  </div>
+                  <div className="mt-5 ">
+                    <div>
+                      <CustomDatagrid leadsData={leadsData} />
+                    </div>
                   </div>
                 </div>
-                <div className="mt-5 ">
-                  <div>
-                    <CustomDatagrid leadsData={leadsData} />
+              ) : (
+                <div>
+                  <div className="mt-4">
+                    <div>
+                      <FilterFields />
+                    </div>
+                  </div>
+                  <div className="mt-5 ">
+                    <div>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          "& > :not(style)": {
+                            m: 1,
+                            width: "100%",
+                          },
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                            alignItems: "center",
+                          }}
+                        >
+                          <NextImage
+                            width={"500px"}
+                            src={"/images/no-data-img.svg"}
+                            alt={"no-data"}
+                            loading="lazy"
+                          />
+                          <div>
+                            <span>{"No Data Found"}</span>
+                          </div>
+                        </Box>
+                      </Box>
+                    </div>
                   </div>
                 </div>
-              </div>):(
-                   <div>
-                   <div className="mt-4">
-                     <div>
-                       <FilterFields />
-                     </div>
-                   </div>
-                   <div className="mt-5 ">
-                     <div>
-                       <Box
-                         sx={{
-                           display: "flex",
-                           flexWrap: "wrap",
-                           "& > :not(style)": {
-                             m: 1,
-                             width: "100%",
-                           },
-                         }}
-                       >
-                         <Box
-                           sx={{
-                             display: "flex",
-                             justifyContent: "center",
-                             flexDirection: "column",
-                             alignItems: "center",
-                           }}
-                         >
-                           <Image
-                             src={"/images/no-data-img.svg"}
-                             style={{ width: "500px", height: "auto" }}
-                             alt={"no-data"}
-                             loading="lazy"
-                           />
-                           <div>
-                             <span>{"No Data Found"}</span>
-                           </div>
-                         </Box>
-                       </Box>
-                     </div>
-                   </div>
-                 </div>
               )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
@@ -433,9 +436,9 @@ export default function MasterGridNavigation({
                           alignItems: "center",
                         }}
                       >
-                        <Image
+                        <NextImage
+                          width={"500px"}
                           src={"/images/waiting-to-search.svg"}
-                          style={{ width: "500px", height: "auto" }}
                           alt={"waiting-to-search"}
                           loading="lazy"
                         />
@@ -475,9 +478,9 @@ export default function MasterGridNavigation({
                           alignItems: "center",
                         }}
                       >
-                        <Image
+                        <NextImage
+                          width={"500px"}
                           src={"/images/no-data-img.svg"}
-                          style={{ width: "500px", height: "auto" }}
                           alt={"no-data"}
                           loading="lazy"
                         />

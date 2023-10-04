@@ -1,6 +1,6 @@
 
 import React from 'react'
-import SignInCard from '../../app/pages/signIn/signInForm'
+import SignInCard from '@/app/pages/signIn/signInForm'
 
 
 function Signin() {

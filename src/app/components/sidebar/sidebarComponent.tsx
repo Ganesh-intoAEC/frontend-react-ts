@@ -1,28 +1,27 @@
-import * as React from "react";
-import { styled, Theme, CSSObject } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
+import { Logout, PersonAdd, Settings } from "@mui/icons-material";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import SearchIcon from "@mui/icons-material/Search";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import { ListItemIcon, Menu, MenuItem } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
+import MuiDrawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
-import Avatar from "@mui/material/Avatar";
-import SearchIcon from "@mui/icons-material/Search";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import { CSSObject, Theme, styled } from "@mui/material/styles";
 import router, { useRouter } from "next/router";
-import { ListItemIcon, Menu, MenuItem } from "@mui/material";
-import { Logout, PersonAdd, Settings } from "@mui/icons-material";
-import Image from 'next/image'
-
+import * as React from "react";
+import NextImage from "../NextImage";
 
 const drawerWidth = 240;
 
@@ -113,7 +112,7 @@ export default function MiniDrawer() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  //logout 
+  //logout
   const handleLogout = () => {
     // Assuming you want to set isLoggedIn to true upon login
     const isLoggedIn = false;
@@ -131,9 +130,9 @@ export default function MiniDrawer() {
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: "flex" }}>
             <Box sx={{ width: "180px", padding: "10px" }}>
-              <Image
+              <NextImage
+                width={"100%"}
                 src={"/images/logo.png"}
-                style={{ width: "100%", height: "auto" }}
                 alt={"logo"}
                 loading="lazy"
               />
@@ -159,7 +158,7 @@ export default function MiniDrawer() {
             <IconButton>
               <NotificationsNoneIcon />
             </IconButton>
-           
+
             <React.Fragment>
               <Box
                 sx={{

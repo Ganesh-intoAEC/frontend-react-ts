@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import CancelIcon from '@mui/icons-material/Cancel';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import CancelIcon from '@mui/icons-material/Cancel';
-import UserImageUpload from '../../../assets/icons/userImageUpload';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Image from 'next/image'
+import React, { useState } from 'react';
+import UserImageUpload from '../../../assets/icons/userImageUpload';
+import NextImage from '../NextImage';
 
 
 
@@ -122,10 +122,10 @@ const ImageUpload: React.FC = () => {
         }}
       >
         {image ? (
-          <Image
+          <NextImage
             src={image}
+            width={"100%"}
             alt="User"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
             loading="lazy"
           />
         ) : (

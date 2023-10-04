@@ -1,5 +1,6 @@
 import React from 'react';
-import { StepIconProps, Typography, styled } from '@mui/material';
+import { StepIconProps, Typography } from '@mui/material';
+import {styled} from '@mui/material/styles';
 
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 
@@ -7,6 +8,7 @@ import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector
 
 // Define the custom connector style
 const CustomStepConnector = styled(StepConnector)(({ theme }) => ({
+  
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 22,
     left:'-110px',

@@ -1,7 +1,5 @@
-import React from "react";
-import CreateLeadForm from "../../../app/pages/lead/create/createLeadMultistepForm";
 import Head from "next/head";
-import { ThemeProvider } from "@mui/material";
+import CreateLeadForm from "../../../app/pages/lead/create/createLeadMultistepForm";
 
 export default function Home() {
   return (
@@ -13,9 +11,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <ThemeProvider theme={{}}>
         <CreateLeadForm />
-        </ThemeProvider>
       </main>
     </>
   );

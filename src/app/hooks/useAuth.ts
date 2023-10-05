@@ -11,11 +11,6 @@ export default function useAuth() {
       // Session is still loading, do nothing
       return;
     }
-
-    if (!session) {
-      // User is not authenticated, redirect to the login page
-      router.push('/auth/signIn');
-    }
   }, [session, status, router]);
 
   return { session, status };

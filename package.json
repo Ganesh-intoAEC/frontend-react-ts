@@ -26,6 +26,7 @@
     "dayjs": "^1.11.10",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
+    "moment": "^2.29.4",
     "mui-tel-input": "^4.0.0",
     "next": "13.5.1",
     "next-auth": "^4.23.2",

@@ -15,7 +15,7 @@ import {
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { toast } from "react-toastify";
 const SignInCard: React.FC = () => {

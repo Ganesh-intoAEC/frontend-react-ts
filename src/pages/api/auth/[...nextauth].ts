@@ -1,6 +1,7 @@
 import NextAuth from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
-
+import moment from "moment";
+import { parseJwt } from "@/lib/helpers";
 export default NextAuth({
   providers: [
     Credentials({
@@ -30,17 +31,53 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }: any) {
-      return { ...token, ...user };
+    async jwt({ token, user, trigger, session }: any) {
+      let expires: any = {};
+      if (trigger == "update") {
+        const result = await fetch(
+          "https://dev-userhub.aecmultiverse.com/session",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              eventType: "REFRESH_TOKEN",
+              previousRefreshToken: token?.RefreshToken,
+            }),
+          }
+        ).then((res) => res.json());
+        if (result && result.code == "REFRESH_TOKEN_REQUEST_SUCCESSFUL") {
+          session = { ...token, IdToken: result?.body?.IdToken };
+        }
+      } else {
+        if (token?.IdToken) {
+          expires = await parseJwt(token?.IdToken);
+          session = { ...token };
+        } else if (user) {
+          expires = await parseJwt(user?.IdToken);
+          session = { ...user };
+        }
+        session = {
+          ...session,
+          exp: expires.exp,
+          "custom:organization_name": expires["custom:organization_name"],
+          "custom:organization_id": expires["custom:organization_id"],
+          given_name: expires.given_name,
+          "custom:organization_type": expires["custom:organization_type"],
+          auth_time: expires.auth_time,
+          email: expires.email,
+        };
+      }
+
+      return session;
     },
     async session({ token, session }: any) {
-      session.user = token;
+      session = token;
       return session;
     },
   },
+  session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth/signIn",
-    error: "/auth/signIn"
+    error: "/auth/signIn",
   },
 });

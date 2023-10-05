@@ -9,7 +9,6 @@ import FilterIcon from "../../../../assets/icons/filter-icon";
 
 import CustomDateRangePicker from "@/app/components/CustomDateRangePicker";
 import useFetch from "use-http";
-import { useSession } from "next-auth/react";
 
 export interface leadStatusesTypes {
   leadStatusId: string;
@@ -27,16 +26,7 @@ export default function FilterFields() {
   const [leadSources, setLeadSources] = React.useState<Array<leadSourcesTypes>>(
     []
   );
-  const { data: session } = useSession();
-  const { post, response, error } = useFetch(
-    `${process.env.NEXT_PUBLIC_ENDPOINT_FETCH}`,
-    {
-      headers: {
-        Authorization: `Bearer ${session?.user?.IdToken}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const { post, response, error } = useFetch('/fetch');
 
   React.useEffect(() => {
     // Fetch data for lead statuses
@@ -45,10 +35,6 @@ export default function FilterFields() {
     // Fetch data for lead sources
   }, []);
 
-  React.useEffect(() => {
-    console.log(leadSources);
-    console.log(leadStatus);
-  }, [leadStatus, leadSources]);
 
   const fetchLeadStatusData = async () => {
     const requestData = {
@@ -58,7 +44,6 @@ export default function FilterFields() {
 
     if (response.ok) {
       const res = await response.json();
-      console.log(res);
 
       setLeadStatus(res?.body || []);
     } else {
@@ -75,7 +60,6 @@ export default function FilterFields() {
 
     if (response.ok) {
       const res = await response.json();
-      console.log(res);
       setLeadSources(res?.body || []);
     } else {
       // Handle error here

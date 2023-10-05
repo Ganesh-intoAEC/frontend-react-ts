@@ -2,18 +2,20 @@ import useAuth from "@/app/hooks/useAuth";
 import { Box, CssBaseline } from "@mui/material";
 import { ReactNode } from "react";
 import MiniDrawer from "../sidebar/sidebarComponent";
+import { useRouter } from "next/router";
 interface Props {
   children: ReactNode;
 }
 const AuthProvider = ({ children }: Props) => {
   const { session, status } = useAuth();
+  const {pathname} = useRouter();
   if (status === "loading") {
     return <p>Loading...</p>;
   }
 
   return (
     <>
-      {session ? (
+      {session && !pathname.includes("auth")? (
         <Box sx={{ display: "flex", fontFamily: "poppins" }}>
           <CssBaseline />
           <MiniDrawer />

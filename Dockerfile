@@ -12,6 +12,9 @@ COPY ./package*.json ./
 
 # Install dependencies
 RUN npm install --force 
+RUN cd deploy
+RUN npm ci
+RUN cd ..
 
 # Copy all files
 COPY ./ ./

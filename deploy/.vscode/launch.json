@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "./handlers/leads-create.ts",
+            "outFiles": [
+                "./build/deploy/handlers/*.js"
+            ],
+            "env": {
+                "environment": "develop",
+                "branchName": "develop",
+                "accountNumber": "666803772105",
+                "region": "ap-south-1",
+                "dbName": "AEC_USERS",
+                "dbPort": "5432",
+                "dbUser": "aec",
+                "dbProxyName": "devdb-proxy",
+                "dbProxyArn": "arn:aws:iam::666803772105:role/service-role/rds-proxy-role-1690208875200",
+                "dbProxyEndpoint": "devdb-proxy.proxy-cqgclnwavn1q.ap-south-1.rds.amazonaws.com",
+                "redisHost": "clustercfg.devcache.puk5rr.aps1.cache.amazonaws.com",
+                "redisPort": "6379",
+                "AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE": "1"
+            }
+        }
+    ]
+}

@@ -1,58 +1,66 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import * as cdk from "aws-cdk-lib";
-import {
-  CodePipeline,
-  CodePipelineSource,
-  ShellStep,
-} from "aws-cdk-lib/pipelines";
+import * as cdk from 'aws-cdk-lib';
+import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from "constructs";
-import { CDKContext } from "../types";
-import { CreatePipeLineStage } from "./add-stages";
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { Pipeline, Artifact } from 'aws-cdk-lib/aws-codepipeline';
+import { CodeStarConnectionsSourceAction, CodeBuildAction } from 'aws-cdk-lib/aws-codepipeline-actions';
+import { PipelineProject, LinuxBuildImage, BuildSpec } from 'aws-cdk-lib/aws-codebuild';
+import { Repository } from 'aws-cdk-lib/aws-codecommit';
 
-export class DeployDevStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+export class DeployDevStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const buildCommands = [
-      "docker-compose build"
-    ];
+    // Create a CodePipeline artifact to store intermediate build artifacts
+    const outputArtifact = new Artifact();
 
-    const devSynthStep = new ShellStep("Synth", {
-      input: CodePipelineSource.connection("intoaecin/intoaec-ui", "nextjs", {
-        connectionArn:
-          "arn:aws:codestar-connections:ap-south-1:666803772105:connection/579af0b8-45fd-43f5-9f7d-65ed14697b1a",
-      }),
-      installCommands: [
-        "curl -fsSL https://get.docker.com/ | sh",
-      ],
-      commands: buildCommands,
-      primaryOutputDirectory: "deploy/cdk.out",
+    // Create a CodeStar Connections source action to connect to the GitHub repository
+    const sourceAction = new CodeStarConnectionsSourceAction({
+      actionName: 'GitHubSource',
+      owner: 'intoaecin',
+      repo: 'intoaec-ui',
+      branch: 'nextjs',
+      connectionArn: 'arn:aws:codestar-connections:ap-south-1:666803772105:connection/579af0b8-45fd-43f5-9f7d-65ed14697b1a',
+      output: outputArtifact,
     });
 
-    const devPipeline = new CodePipeline(this, "intoaec-ui-dev-Pipeline", {
-      pipelineName: `intoaec-ui-dev-Pipeline`,
-      synth: devSynthStep,
+    // Create a CodeBuild project for the build step
+    const project = new PipelineProject(this, 'BuildProject', {
+      projectName: 'MyBuildProject',
+      buildSpec: BuildSpec.fromSourceFilename('../buildspec.yaml'),
+      environment: {
+        buildImage: LinuxBuildImage.STANDARD_5_0,
+      },
+      environmentVariables: {
+        AWS_DEFAULT_REGION: {value: "ap-south-1"},
+        IMAGE_REPO_NAME: {value: "intoaec-ui-dev"},
+        IMAGE_TAG: {value: "latest"},
+        AWS_ACCOUNT_ID: {value: "666803772105"}
+      }
     });
 
-    const devContext: CDKContext = {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ...scope.node
-        .tryGetContext("environments")
-        .find((e: any) => e.branchName === "develop"),
-      ...scope.node.tryGetContext("globals"),
-    };
+    // Create a CodeBuild action for the build step
+    const buildAction = new CodeBuildAction({
+      actionName: 'Build',
+      project,
+      input: outputArtifact,
+      outputs: [new Artifact()],
+    });
 
-    console.log(`printing the dev context: ${JSON.stringify(devContext)}`);
-
-    const devStage = devPipeline.addStage(
-      new CreatePipeLineStage(this, "intoaec-ui-develop", devContext, {
-        env: {
-          account: devContext.accountNumber,
-          region: devContext.region,
+    // Create the CodePipeline
+    const pipeline = new Pipeline(this, 'MyPipeline', {
+      pipelineName: 'MyPipeline',
+      stages: [
+        {
+          stageName: 'Source',
+          actions: [sourceAction],
         },
-      })
-    );
+        {
+          stageName: 'Build',
+          actions: [buildAction],
+        },
+      ],
+    });
   }
 }

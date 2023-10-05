@@ -31,13 +31,14 @@ export class DeployDevStack extends Stack {
       buildSpec: BuildSpec.fromSourceFilename('buildspec.yml'),
       environment: {
         buildImage: LinuxBuildImage.STANDARD_5_0,
+        privileged: true
       },
       environmentVariables: {
         AWS_DEFAULT_REGION: {value: "ap-south-1"},
         IMAGE_REPO_NAME: {value: "intoaec-ui-dev"},
         IMAGE_TAG: {value: "latest"},
         AWS_ACCOUNT_ID: {value: "666803772105"}
-      }
+      },
     });
 
     // Create a CodeBuild action for the build step

@@ -28,7 +28,7 @@ export class DeployDevStack extends Stack {
     // Create a CodeBuild project for the build step
     const project = new PipelineProject(this, 'BuildProject', {
       projectName: 'MyBuildProject',
-      buildSpec: BuildSpec.fromSourceFilename('../buildspec.yaml'),
+      buildSpec: BuildSpec.fromSourceFilename('../buildspec.yml'),
       environment: {
         buildImage: LinuxBuildImage.STANDARD_5_0,
       },

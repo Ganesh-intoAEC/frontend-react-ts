@@ -11,7 +11,7 @@ RUN npm install --global pm2
 COPY ./package*.json ./
 
 # Install dependencies
-RUN npm install --force 
+RUN npm install --force
 
 # Copy all files
 COPY ./ ./

@@ -31,8 +31,12 @@ const MultipleSelectDropdown: React.FC<MultipleSelectDropdownProps> = ({
   const handleChange = (event: SelectChangeEvent<typeof selectedOptions>) => {
     const value: any = event.target.value;
     if (value.includes("selectAll")) {
-      const arr = dataArr.map((value) => value.id);
-      setSelectedOptions(["selectAll", ...arr]);
+      if (value.length < selectedOptions.length) {
+        setSelectedOptions(value);
+      } else {
+        const arr = dataArr.map((value) => value.id);
+        setSelectedOptions(["selectAll", ...arr]);
+      }
     } else {
       if (
         selectedOptions.includes("selectAll") &&

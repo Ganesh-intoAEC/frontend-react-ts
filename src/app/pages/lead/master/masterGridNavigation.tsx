@@ -20,6 +20,7 @@ import { LeadsTypes } from "../../../../pages/leads/master";
 import CustomDropdownBtn from "../../../components/customDropdownBtn/customDropdownBtn";
 import CustomDatagrid from "./_customDatagrid";
 import FilterFields from "./_filterFields";
+import SkeletonMasterGrid from "./skeleton";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -324,7 +325,9 @@ export default function MasterGridNavigation() {
                     </div>
                   </div>
                   <div className="mt-5 ">
-                    {leadsData.length > 0 ? (
+                    {loading == true ? (
+                      <SkeletonMasterGrid />
+                    ) : leadsData.length > 0 ? (
                       <div className="mt-5 ">
                         <div>
                           <CustomDatagrid

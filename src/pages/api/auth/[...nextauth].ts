@@ -31,7 +31,21 @@ export default NextAuth({
       },
     }),
   ],
-  events: {},
+  events: {
+    async signOut({ token }) {
+      const logOutres = await fetch(
+        "https://dev-userhub.aecmultiverse.com/session",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            eventType: "LOGOUT_USER",
+            accessToken: token.AccessToken,
+          }),
+        }
+      ).then((res) => res.json());
+      console.log(logOutres);
+    },
+  },
   callbacks: {
     async jwt({ token, user }: any) {
       let expires: any = {};

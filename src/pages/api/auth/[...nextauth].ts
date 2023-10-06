@@ -1,7 +1,6 @@
+import { parseJwt } from "@/lib/helpers";
 import NextAuth from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
-import moment from "moment";
-import { parseJwt } from "@/lib/helpers";
 export default NextAuth({
   providers: [
     Credentials({
@@ -31,8 +30,9 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }: any) {
+    async jwt({ token, user, trigger }: any) {
       let expires: any = {};
+      let session ={}
       if (trigger == "update") {
         const result = await fetch(
           "https://dev-userhub.aecmultiverse.com/session",

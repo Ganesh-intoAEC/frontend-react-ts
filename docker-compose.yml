@@ -1,8 +1,10 @@
 version: '3'
 services:
   nextjs: 
+    image: intoaec-ui-dev-nextjs
     build: ./
   nginx: 
+    image: intoaec-ui-dev-nginx
     build: ./nginx
     ports:
       - 80:80

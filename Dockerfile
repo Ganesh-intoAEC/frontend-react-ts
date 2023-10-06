@@ -1,29 +1,35 @@
-FROM node:18-alpine
+# Stage 1: Build the application
+FROM node:18-alpine AS build
 
-# Set working directory
 WORKDIR /usr/app
 
-# Install PM2 globally
-RUN npm install --global pm2
-
-# Copy "package.json" and "package-lock.json" before other files
-# Utilise Docker cache to save re-installing dependencies if unchanged
-COPY ./package*.json ./
+# Copy only package files to take advantage of caching
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install --force
 
-# Copy all files
-COPY ./ ./
+# Copy the rest of the application files
+COPY . .
 
-# Build app
+# Build the app (adjust this command based on your project)
 RUN npm run build
+
+# Stage 2: Create a smaller image
+FROM node:18-alpine
+
+WORKDIR /usr/app
+
+# Copy only the built files and production dependencies from the previous stage
+COPY --from=build /usr/app/package.json ./package.json
+COPY --from=build /usr/app/node_modules ./node_modules
+COPY --from=build /usr/app/.next ./.next
+COPY --from=build /usr/app/public ./public
 
 # Expose the listening port
 EXPOSE 3000
 
 # Run container as non-root (unprivileged) user
-# The "node" user is provided in the Node.js Alpine base image
 USER node
 
 # Launch app with PM2

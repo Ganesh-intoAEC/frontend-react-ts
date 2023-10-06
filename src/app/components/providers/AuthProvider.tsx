@@ -7,6 +7,7 @@ import MiniDrawer from "../sidebar/sidebarComponent";
 interface Props {
   children: ReactNode;
 }
+
 const AuthProvider = ({ children }: Props) => {
   const { data: session, status } = useSession();
   const { pathname } = useRouter();
@@ -17,39 +18,13 @@ const AuthProvider = ({ children }: Props) => {
 
   const options: IncomingOptions = {
     interceptors: {
-      request: async ({ options }) => {
-        // const expires = session?.exp ?? 1;
-        // if (moment(moment().unix() * 1000).isAfter(moment(expires * 1000))) {
-        //   const result = await fetch(
-        //     "https://dev-userhub.aecmultiverse.com/session",
-        //     {
-        //       method: "POST",
-        //       body: JSON.stringify({
-        //         eventType: "REFRESH_TOKEN",
-        //         previousRefreshToken: session?.RefreshToken,
-        //       }),
-        //     }
-        //   ).then((res) => res.json());
-        //   if (result && result.code == "REFRESH_TOKEN_REQUEST_SUCCESSFUL") {
-        //     const newJwt = await parseJwt(result?.body?.IdToken);
-        //     const sess = await update((prev: any) => ({
-        //       ...prev,
-        //       ...newJwt,
-        //       ...result?.body,
-        //     }));
-        //     console.log("TImEOUT:::afterupdate", sess);
-        //     options.headers = {
-        //       Authorization: `Bearer ${sess?.IdToken}`,
-        //     };
-        //     return options;
-        //   } else {
-        //     return options;
-        //   }
-        // } else {
-        options.headers = {
-          Authorization: `Bearer ${session?.IdToken}`,
-        };
-        // }
+      request: async ({ options, path }) => {
+        if (!path?.includes("session")) {
+          options.headers = {
+            Authorization: `Bearer ${session?.IdToken}`,
+          };
+        }
+
         return options;
       },
       response: async ({ response }) => {

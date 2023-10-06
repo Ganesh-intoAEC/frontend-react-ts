@@ -5,7 +5,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import React, { useEffect } from "react";
+import React from "react";
 import CustomTablePagination from "../../../components/customTablePagination/customTablePagination";
 // import TablePagination from '@mui/material/TablePagination';
 import Avatar from "@mui/material/Avatar";
@@ -15,10 +15,10 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import CustomDatagridDropdown from "../../../components/customDropdownBtn/cutomDropdownDataGrid";
 import AscIcon from "../../../../assets/icons/ascending-icon";
 import DscIcon from "../../../../assets/icons/descending-icon";
 import RibbonIcon from "../../../../assets/icons/ribbon-icon";
+import CustomDatagridDropdown from "../../../components/customDropdownBtn/cutomDropdownDataGrid";
 
 import GridSearchExport from "@/app/pages/lead/master/_gridSearchExport";
 import {
@@ -35,10 +35,10 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useRouter } from "next/router";
-import { dropdownOptions } from "../../../constants/constant";
 import LostIcon from "../../../../assets/icons/lost-icon";
 import WonIcon from "../../../../assets/icons/won-icon";
 import { LeadsTypes } from "@/pages/leads/master";
+import { dropdownOptions } from "../../../constants/constant";
 
 interface Row {
   id: number;

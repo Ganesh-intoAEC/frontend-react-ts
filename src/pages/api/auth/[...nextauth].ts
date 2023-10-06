@@ -1,4 +1,6 @@
+import getRefreshToken from "@/lib/getRefreshToken";
 import { parseJwt } from "@/lib/helpers";
+import moment from "moment";
 import NextAuth from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
 export default NextAuth({
@@ -29,43 +31,41 @@ export default NextAuth({
       },
     }),
   ],
+  events: {},
   callbacks: {
-    async jwt({ token, user, trigger }: any) {
+    async jwt({ token, user }: any) {
       let expires: any = {};
-      let session ={}
-      if (trigger == "update") {
-        const result = await fetch(
-          "https://dev-userhub.aecmultiverse.com/session",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              eventType: "REFRESH_TOKEN",
-              previousRefreshToken: token?.RefreshToken,
-            }),
+      let session: any = {};
+
+      if (token?.IdToken) {
+        expires = await parseJwt(token?.IdToken);
+
+        if (
+          moment(moment().unix() * 1000).isAfter(moment(expires.exp * 1000))
+        ) {
+          const refreshToken = await getRefreshToken(token.RefreshToken);
+          if (refreshToken) {
+            expires = await parseJwt(refreshToken?.IdToken);
           }
-        ).then((res) => res.json());
-        if (result && result.code == "REFRESH_TOKEN_REQUEST_SUCCESSFUL") {
-          session = { ...token, IdToken: result?.body?.IdToken };
-        }
-      } else {
-        if (token?.IdToken) {
-          expires = await parseJwt(token?.IdToken);
+          session = { ...refreshToken };
+        } else {
           session = { ...token };
-        } else if (user) {
-          expires = await parseJwt(user?.IdToken);
-          session = { ...user };
         }
-        session = {
-          ...session,
-          exp: expires.exp,
-          "custom:organization_name": expires["custom:organization_name"],
-          "custom:organization_id": expires["custom:organization_id"],
-          given_name: expires.given_name,
-          "custom:organization_type": expires["custom:organization_type"],
-          auth_time: expires.auth_time,
-          email: expires.email,
-        };
+      } else if (user) {
+        expires = await parseJwt(user?.IdToken);
+        session = { ...user };
       }
+
+      session = {
+        ...session,
+        exp: expires.exp,
+        "custom:organization_name": expires["custom:organization_name"],
+        "custom:organization_id": expires["custom:organization_id"],
+        given_name: expires.given_name,
+        "custom:organization_type": expires["custom:organization_type"],
+        auth_time: expires.auth_time,
+        email: expires.email,
+      };
 
       return session;
     },
@@ -74,7 +74,6 @@ export default NextAuth({
       return session;
     },
   },
-  session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth/signIn",

@@ -33,7 +33,9 @@ export class DeployDevStack extends cdk.Stack {
       "docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG",
       "echo Build completed on `date`",
       "echo Pushing the Docker image...",
-      "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG"
+      "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG",
+      "cd deploy",
+      "npx cdk synth"
     ];
 
     const devSynthStep = new ShellStep("Synth", {
@@ -42,7 +44,7 @@ export class DeployDevStack extends cdk.Stack {
           "arn:aws:codestar-connections:ap-south-1:666803772105:connection/579af0b8-45fd-43f5-9f7d-65ed14697b1a",
       }),
       commands: buildCommands,
-      primaryOutputDirectory: "deploy/cdk.out",
+      // primaryOutputDirectory: "deploy/cdk.out",
     });
 
     const devPipeline = new CodePipeline(this, "intoaec-ui-dev-Pipeline", {
@@ -67,13 +69,13 @@ export class DeployDevStack extends cdk.Stack {
 
     console.log(`printing the dev context: ${JSON.stringify(devContext)}`);
 
-    // const devStage = devPipeline.addStage(
-    //   new CreatePipeLineStage(this, "intoaec-ui-develop", devContext, {
-    //     env: {
-    //       account: devContext.accountNumber,
-    //       region: devContext.region,
-    //     },
-    //   })
-    // );
+    const devStage = devPipeline.addStage(
+      new CreatePipeLineStage(this, "intoaec-ui-develop", devContext, {
+        env: {
+          account: devContext.accountNumber,
+          region: devContext.region,
+        },
+      })
+    );
   }
 }

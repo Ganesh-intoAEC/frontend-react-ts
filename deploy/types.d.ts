@@ -23,6 +23,7 @@ export type CDKContext = {
   cognitoSecretHash: string;
   redisHost: string;
   redisPort: string;
+  imageRepoName: string;
   vpc?: {
     id: string;
     cidr: string;

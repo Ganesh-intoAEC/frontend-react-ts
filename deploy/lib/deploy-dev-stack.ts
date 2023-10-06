@@ -44,7 +44,7 @@ export class DeployDevStack extends cdk.Stack {
           "arn:aws:codestar-connections:ap-south-1:666803772105:connection/579af0b8-45fd-43f5-9f7d-65ed14697b1a",
       }),
       commands: buildCommands,
-      // primaryOutputDirectory: "deploy/cdk.out",
+      primaryOutputDirectory: "deploy/cdk.out",
     });
 
     const devPipeline = new CodePipeline(this, "intoaec-ui-dev-Pipeline", {

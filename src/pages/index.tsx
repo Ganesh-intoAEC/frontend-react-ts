@@ -1,8 +1,12 @@
 import Head from "next/head";
-import SignInCard from "../app/pages/signIn/signInForm";
-
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
+  const router = useRouter();
+  useEffect(() => {
+    router.push("/dashboard");
+  }, []);
   return (
     <>
       <Head>
@@ -11,8 +15,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-      </main>
+      <main></main>
     </>
   );
 }

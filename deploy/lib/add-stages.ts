@@ -7,6 +7,6 @@ export class CreatePipeLineStage extends cdk.Stage{
     constructor(scope: Construct, stageName: string, context: CDKContext, props?: cdk.StageProps) {
         super(scope, stageName ,props);
         
-        new CreateCloudResources(this, stageName, context);
+        //new CreateCloudResources(this, stageName, context);
     }
 }

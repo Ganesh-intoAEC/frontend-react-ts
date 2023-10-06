@@ -1,9 +1,8 @@
-import { parseJwt } from "@/lib/helpers";
 import { Box, CssBaseline } from "@mui/material";
 import moment from "moment";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { IncomingOptions, Provider } from "use-http";
 import MiniDrawer from "../sidebar/sidebarComponent";
 interface Props {

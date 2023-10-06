@@ -33,9 +33,7 @@ export class DeployDevStack extends cdk.Stack {
       "docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG",
       "echo Build completed on `date`",
       "echo Pushing the Docker image...",
-      "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG",
-      "cd deploy",
-      "npx cdk synth"
+      "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG"
     ];
 
     const devSynthStep = new ShellStep("Synth", {

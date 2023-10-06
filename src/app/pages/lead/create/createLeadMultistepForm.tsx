@@ -1,4 +1,5 @@
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { LoadingButton } from "@mui/lab";
 import {
   Box,
   Button,
@@ -9,47 +10,102 @@ import {
   Stepper,
   TextField,
 } from "@mui/material";
-import Typography from '@mui/material/Typography';
+import Typography from "@mui/material/Typography";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MuiTelInput } from "mui-tel-input";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import ProjectEye from "../../../../assets/icons/project-eye";
-import SuccessTick from "../../../../assets/icons/success-tick";
-import UsersInfo from "../../../../assets/icons/users-info";
 import CustomInputText from "../../../components/customInputText/customInputText";
 import ColorlibStepIcon from "../../../components/customStepper/colorStepicon";
 import ImageUpload from "../../../components/profileImageUpload/profileImageUpload";
 import SelectIconDropdown from "../../../components/singleSelectIconDropdown/singleSelectIconDropdown";
+
+import { LeadCreateTypes } from "@/pages/leads/create";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import useFetch from "use-http";
 import {
   AvatarArr,
   LeadSources,
   Priority,
-  ProjectTypes,
+  steps,
 } from "../../../constants/constant";
+import { leadSourcesTypes } from "../master/_filterFields";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 80,
+      fontSize: "12px !important",
+    },
+  },
+};
 
 const CreateLeadForm: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [formData, setFormData] = useState({
-    LeadName: "",
-    Address: "",
-    email: "",
-    phoneNumber: "",
-    city: "",
-    state: "",
-    country: "",
-    projectLocation: "",
-    projectDescription: "",
-    leadSource: "",
-    assignTo: "",
-    priority: "",
-    isValidEmail: true,
-  });
+  const [formData, setFormData] = useState<LeadCreateTypes>();
+  const [isValidEmail, setIsValidEmail] = React.useState<boolean>(false);
+  const [leadSources, setLeadSources] = React.useState<Array<leadSourcesTypes>>(
+    []
+  );
+  const { post, response, error } = useFetch("/fetch");
+  const {
+    post: createPost,
+    response: createResponse,
+    error: createError,
+  } = useFetch("/create");
+  const [formBtnLoading, setFormBtnLoading] = React.useState(false);
 
-  const {push,back} = useRouter();
+  const { push, back } = useRouter();
 
+  const fetchLeadSourceData = async () => {
+    const requestData = {
+      eventType: "GET_LEAD_SOURCES",
+    };
+    await post(requestData);
+
+    if (response.ok) {
+      const res = await response.json();
+      setLeadSources(res?.body || []);
+      console.log(res?.body);
+    } else {
+      // Handle error here
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    // Fetch data for lead sources
+    fetchLeadSourceData();
+  }, []);
+
+  const createLead = async (queryParameters: Partial<LeadCreateTypes>) => {
+    const requestData = {
+      eventType: "CREATE_LEAD",
+
+      ...queryParameters,
+    };
+
+    await createPost(requestData);
+
+    if (createResponse?.ok) {
+      const res = await createResponse.json();
+      push("/leads/master?isActive=true");
+      toast.success("Lead stage updated successfully", { autoClose: 2500 });
+      console.log(res?.body);
+    } else {
+      toast.error("An error occurred while creating the lead", {
+        autoClose: 2500,
+      });
+      setFormBtnLoading(false);
+      console.error("Error fetching data:", createError);
+    }
+  };
   const cities = [
     {
       city: "Chennai sdf sdfsfs",
@@ -68,47 +124,70 @@ const CreateLeadForm: React.FC = () => {
     },
   ];
 
-  const steps = [
-    {
-      label: "Lead",
-      icon: <UsersInfo style={{ width: "30px", height: "30px" }} />,
-    },
-    {
-      label: "Project",
-      icon: <ProjectEye style={{ width: "30px", height: "30px" }} />,
-    },
-    {
-      label: "Success",
-      icon: <SuccessTick style={{ width: "30px", height: "30px" }} />,
-    },
-  ];
-
   const isStepValid = () => {
     switch (activeStep) {
       case 0:
         return (
-          formData.LeadName !== "" &&
-          formData.Address !== "" 
-          // &&
-          // formData.phoneNumber !== ""
+          formData?.leadName !== undefined &&
+          formData?.leadName !== "" &&
+          formData?.leadEmail !== undefined &&
+          formData?.leadEmail !== "" &&
+          formData?.leadAddress !== undefined &&
+          formData?.leadAddress !== "" &&
+          formData?.leadMobile !== undefined &&
+          formData?.leadMobile !== "" &&
+          formData?.leadZipcode !== undefined &&
+          formData?.leadZipcode !== "" &&
+          formData !== undefined
         );
       case 1:
         return (
-          formData.projectLocation !== "" && formData.projectDescription !== ""
+          formData?.leadProjectType !== "" &&
+          formData?.leadProjectType !== undefined
         );
       case 2:
-        return true;
+        return (
+          formData?.leadSource !== "" && formData?.leadSource !== undefined
+        );
       default:
         return false;
     }
   };
 
   const handleNext = () => {
+    console.log(formData);
+
     if (isStepValid()) {
       if (activeStep === steps.length - 1) {
         // Handle form submission here
+        const queryParameters: Partial<LeadCreateTypes> = {
+          leadName: formData?.leadName,
+          leadEmail: formData?.leadEmail,
+          leadMobile: formData?.leadMobile,
+          leadAddress: formData?.leadAddress,
+          leadCity: formData?.leadCity,
+          leadState: formData?.leadState,
+          leadZipcode: formData?.leadZipcode,
+          leadSource: formData?.leadSource,
+          leadProjectType: formData?.leadProjectType,
+          estimatedRevenueFromLead: formData?.estimatedRevenueFromLead,
+          estimatedProfitFromLead: formData?.estimatedProfitFromLead,
+          createdBy: "Dev Test",
+        };
+        setFormBtnLoading(true);
+        createLead(queryParameters)
+          .then(() => {
+            // toast.success('Lead stage updated successfully', { autoClose: 2500 });
+          })
+          .catch((error) => {
+            toast.error("An error occurred while creating the lead", {
+              autoClose: 2500,
+            });
+            console.error("API request error:", error);
+          });
+
         console.log("Form submitted:", formData);
-        push("/leads/master?isActive=true");
+        // push("/leads/master?isActive=true");
       } else {
         setActiveStep((prevStep) => prevStep + 1);
       }
@@ -118,12 +197,26 @@ const CreateLeadForm: React.FC = () => {
   const handleBack = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
+
   const handleChange = (name: string, value: string) => {
+    console.log(formData);
+
+    if (name === "leadEmail") {
+      const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+      if (!emailPattern.test(value)) {
+        // Invalid email format, you can handle this accordingly
+        setIsValidEmail(true);
+        console.log("Invalid email format");
+        // Optionally, you can set an error state or display an error message.
+      } else {
+        setIsValidEmail(false);
+      }
+    }
     if (name === "phoneNumber") {
       value = value.slice(0, 20); // Limit to 15 characters
     }
 
-    setFormData((prevData) => ({
+    setFormData((prevData: any) => ({
       ...prevData,
       [name]: value,
     }));
@@ -207,36 +300,40 @@ const CreateLeadForm: React.FC = () => {
                               <TextField
                                 required
                                 label="Lead name"
-                                name="LeadName"
+                                name="leadName"
                                 type="text"
-                                value={formData.LeadName}
-                                onChange={(e: { target: { value: string; }; }) => handleChange("LeadName", e.target.value)}
+                                value={formData?.leadName}
+                                onChange={(e: { target: { value: string } }) =>
+                                  handleChange("leadName", e.target.value)
+                                }
                                 fullWidth
                                 variant="standard"
                                 helperText=" "
+                                defaultValue={""}
                               />
                               <TextField
                                 label="Email"
                                 // placeholder="Email address"
-                                name="email"
+                                name="leadEmail"
                                 type="email"
-                                onChange={(e: { target: { value: string; }; }) => handleChange("email", e.target.value)}
-                                value={formData.email}
+                                onChange={(e: { target: { value: string } }) =>
+                                  handleChange("leadEmail", e.target.value)
+                                }
+                                value={formData?.leadEmail}
                                 fullWidth
                                 variant="standard"
-                                // error={!formData.isValidEmail}
-                                // helperText={
-                                //   !formData.isValidEmail
-                                //     ? "Invalid email address"
-                                //     : " "
-                                // }
-                                helperText=" "
+                                error={isValidEmail}
+                                helperText={
+                                  isValidEmail ? "Invalid email address" : " "
+                                }
+                                defaultValue={""}
+                                // helperText=" "
                               />
                               {/* <TextField
                                 label="Phone Number"
                                 name="phoneNumber"
                                 type="tel"
-                                value={formData.phoneNumber}
+                                value={formData?.phoneNumber}
                                 onChange={handleChange}
                                 fullWidth
                                 variant="standard"
@@ -244,57 +341,64 @@ const CreateLeadForm: React.FC = () => {
                               /> */}
                               <MuiTelInput
                                 label="Phone Number"
-                                name="phoneNumber"
+                                name="leadMobile"
                                 fullWidth
                                 variant="standard"
                                 defaultCountry="IN"
-                               onlyCountries={['IN', 'US', 'CA']}
-                               value={formData.phoneNumber}
-
-                                onChange={(newPhone: string) => handleChange("phoneNumber", newPhone)}
+                                onlyCountries={["IN", "US", "CA"]}
+                                value={formData?.leadMobile}
+                                onChange={(newPhone: string) =>
+                                  handleChange("leadMobile", newPhone)
+                                }
                                 helperText=" "
                                 MenuProps={{ disableScrollLock: true }}
                               />
 
                               <TextField
                                 label="Address"
-                                name="Address"
+                                name="leadAddress"
                                 helperText=" "
-                                value={formData.Address}
-                                onChange={(e: { target: { value: string; }; }) => handleChange("Address", e.target.value)}
+                                value={formData?.leadAddress}
+                                onChange={(e: { target: { value: string } }) =>
+                                  handleChange("leadAddress", e.target.value)
+                                }
                                 fullWidth
                                 variant="standard"
+                                defaultValue={""}
                               />
                               <TextField
-                                select
                                 label="City"
-                                name="city"
+                                name="leadCity"
                                 helperText=" "
-                                value={formData.city}
+                                value={formData?.leadCity}
                                 fullWidth
-                                onChange={(e: { target: { value: string; }; }) => handleChange("city", e.target.value)}
+                                onChange={(e: { target: { value: string } }) =>
+                                  handleChange("leadCity", e.target.value)
+                                }
                                 variant="standard"
-                                defaultValue="Small"
-                                SelectProps={{
-                                  MenuProps: { disableScrollLock: true },
-                                }}
+
+                                // SelectProps={{
+                                //   MenuProps: { disableScrollLock: true },
+                                // }}
                               >
-                                {cities.map((option) => (
+                                {/* {cities.map((option) => (
                                   <MenuItem
                                     key={option.city}
                                     value={option.city}
                                   >
                                     {option.city}
                                   </MenuItem>
-                                ))}
+                                ))} */}
                               </TextField>
                               <TextField
                                 select
                                 label="State"
-                                name="state"
-                                value={formData.state}
+                                name="leadState"
+                                value={formData?.leadState}
                                 fullWidth
-                                onChange={(e: { target: { value: string; }; }) => handleChange("state", e.target.value)}
+                                onChange={(e: { target: { value: string } }) =>
+                                  handleChange("leadState", e.target.value)
+                                }
                                 variant="standard"
                                 helperText=" "
                                 SelectProps={{
@@ -311,27 +415,28 @@ const CreateLeadForm: React.FC = () => {
                                 ))}
                               </TextField>
                               <TextField
-                                select
                                 label="Country"
-                                name="country"
-                                value={formData.country}
+                                name="leadCountry"
+                                value={formData?.leadCountry}
                                 fullWidth
-                                onChange={(e: { target: { value: string; }; }) => handleChange("country", e.target.value)}
+                                onChange={(e: { target: { value: string } }) =>
+                                  handleChange("leadCountry", e.target.value)
+                                }
                                 variant="standard"
                                 helperText=" "
-                                SelectProps={{
-                                  MenuProps: { disableScrollLock: true },
-                                }}
-                              >
-                                {cities.map((option) => (
-                                  <MenuItem
-                                    key={option.country}
-                                    value={option.country}
-                                  >
-                                    {option.country}
-                                  </MenuItem>
-                                ))}
-                              </TextField>
+                              ></TextField>
+                              <TextField
+                                label="Zip Code"
+                                name="leadZipcode"
+                                helperText=" "
+                                value={formData?.leadZipcode}
+                                onChange={(e: { target: { value: string } }) =>
+                                  handleChange("leadZipcode", e.target.value)
+                                }
+                                fullWidth
+                                variant="standard"
+                                defaultValue={""}
+                              />
                             </div>
                           )}
                           {activeStep === 1 && (
@@ -357,37 +462,45 @@ const CreateLeadForm: React.FC = () => {
                                 required
                                 label="Project location"
                                 name="projectLocation"
-                                value={formData.projectLocation}
-                                onChange={(e: { target: { value: string; }; }) => handleChange("projectLocation", e.target.value)}
+                                // value={formData?.projectLocation}
+                                // onChange={(e: { target: { value: string; }; }) => handleChange("projectLocation", e.target.value)}
                                 fullWidth
                                 variant="standard"
                                 helperText=" "
                               />
                               <TextField
-                                select
+                                // select
                                 required
                                 label="Project type "
+                                name="leadProjectType" value={formData?.leadProjectType}
+                                onChange={(e: { target: { value: string } }) =>
+                                  handleChange(
+                                    "leadProjectType",
+                                    e.target.value
+                                  )
+                                }
+                               
                                 fullWidth
                                 helperText=" "
                                 variant="standard"
-                                SelectProps={{
-                                  MenuProps: { disableScrollLock: true },
-                                }}
+                                // SelectProps={{
+                                //   MenuProps: { disableScrollLock: true },
+                                // }}
                               >
-                                {ProjectTypes.map((option) => (
+                                {/* {ProjectTypes.map((option) => (
                                   <MenuItem key={option} value={option}>
                                     {option}
                                   </MenuItem>
-                                ))}
+                                ))} */}
                               </TextField>
                               <TextField
                                 label="Description"
                                 name="projectDescription"
                                 multiline
                                 helperText="Note: Maximum character limit is 250."
-                                onChange={(e: { target: { value: string; }; }) => handleChange("projectDescription", e.target.value)}
+                                // onChange={(e: { target: { value: string; }; }) => handleChange("projectDescription", e.target.value)}
                                 rows={4}
-                                value={formData.projectDescription}
+                                // value={formData?.projectDescription}
                                 variant="standard"
                                 fullWidth
                               />
@@ -399,7 +512,7 @@ const CreateLeadForm: React.FC = () => {
                                 control={
                                   <Checkbox
                                     name="agreeToTerms"
-                                    checked={formData.agreeToTerms}
+                                    checked={formData?.agreeToTerms}
                                     onChange={handleChange}
                                   />
                                 }
@@ -410,16 +523,27 @@ const CreateLeadForm: React.FC = () => {
                                 select
                                 required
                                 label="Lead Source"
+                                name="leadSource"
+                                value={formData?.leadSource}
+                                onChange={(e: { target: { value: string } }) =>
+                                  handleChange("leadSource", e.target.value)
+                                }
                                 fullWidth
                                 helperText=" "
                                 variant="standard"
                                 SelectProps={{
-                                  MenuProps: { disableScrollLock: true },
+                                  MenuProps: {
+                                    ...MenuProps,
+                                    disableScrollLock: true,
+                                  },
                                 }}
                               >
-                                {LeadSources.map((option) => (
-                                  <MenuItem key={option} value={option}>
-                                    {option}
+                                {leadSources.map((option) => (
+                                  <MenuItem
+                                    key={option.leadSourceId}
+                                    value={option.leadSourceSubCategory}
+                                  >
+                                    {option.leadSourceSubCategory}
                                   </MenuItem>
                                 ))}
                               </TextField>
@@ -485,7 +609,7 @@ const CreateLeadForm: React.FC = () => {
                               <div>
                                 {activeStep === steps.length - 1 ? (
                                   <>
-                                    <Button
+                                    <LoadingButton
                                       sx={{
                                         width: "160px",
                                         height: "42px",
@@ -500,10 +624,12 @@ const CreateLeadForm: React.FC = () => {
                                       variant="contained"
                                       color="primary"
                                       onClick={handleNext}
-                                      disabled={!isStepValid()} // Disable the button if the step is not valid
+                                      loading={formBtnLoading}
+                                      loadingPosition="end"
+                                      disabled={!isStepValid()}
                                     >
                                       {"Create Lead"}
-                                    </Button>
+                                    </LoadingButton>
                                   </>
                                 ) : (
                                   <>
@@ -541,6 +667,7 @@ const CreateLeadForm: React.FC = () => {
           </Box>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

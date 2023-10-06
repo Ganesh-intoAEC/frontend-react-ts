@@ -263,7 +263,7 @@ export default function MiniDrawer() {
             {
               text: "Lead",
               icon: <PeopleAltIcon />,
-              to: "/leads/initial",
+              to: "/leads/master?isActive=true",
               path: "/leads",
             },
           ].map((item) => (

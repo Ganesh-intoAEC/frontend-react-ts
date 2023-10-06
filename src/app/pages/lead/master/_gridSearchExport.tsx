@@ -8,7 +8,7 @@ import CustomMoreActionBtn from "../../../components/customDropdownBtn/customMor
 import React, { useState } from "react";
 
 interface GridSearchExportProps {
-  isRowSelected: boolean | null;
+  isRowSelected: boolean ;
   rowSelectedStage: (option: React.SetStateAction<string>) => void;
   leadNameSearch: (leadName: string) => void;
 }
@@ -78,7 +78,9 @@ const GridSearchExport:React.FC<GridSearchExportProps> = ({ isRowSelected, rowSe
               <TextField
                  fullWidth
                  sx={{'& .MuiOutlinedInput-root':{
-                  padding: '4px'
+                  padding: '0px'
+                }, '& .MuiInputBase-input':{
+                  padding:'14px'
                 }}}
                 value={searchValue}
               placeholder="Search lead name..."

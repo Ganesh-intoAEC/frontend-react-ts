@@ -37,8 +37,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useRouter } from "next/router";
 import LostIcon from "../../../../assets/icons/lost-icon";
 import WonIcon from "../../../../assets/icons/won-icon";
+import { LeadsTypes } from "@/pages/leads/master";
 import { dropdownOptions } from "../../../constants/constant";
-import { MasterGridNavigationTypes } from "./masterGridNavigation";
 
 interface Row {
   id: number;
@@ -118,23 +118,29 @@ const rows: Row[] = [
     "₹ 1,20,000"
   ),
 ];
+interface CustomDatagridTypes {
+  leadsData: Array<LeadsTypes> | null | undefined;
+  isRowSelected: boolean;
+  rowSelectedStage: (option: React.SetStateAction<string>) => void;
+  selectedPropsPass: (option: boolean) => void;
+
+  selectedLeadProps:(option: React.SetStateAction<string[]>) => void;
+}
 
 export default function CustomDatagrid({
   leadsData,
-  leadNameSearch,
-}: MasterGridNavigationTypes) {
+  isRowSelected,
+  rowSelectedStage,
+  selectedPropsPass,
+  selectedLeadProps
+}: CustomDatagridTypes) {
   // const [page] = React.useState(0);
-  const [rowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState<number | null>();
   const { push } = useRouter();
   const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
   const [orderBy, setOrderBy] = React.useState<Column | "">("");
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
   const [hoveredRow, setHoveredRow] = React.useState<number | null>(null);
-  const [isRowSelected, setIsRowSelected] = React.useState<boolean | null>(
-    false
-  );
-  const [rowStageModal, setRowStageModal] = React.useState(false);
-  const [rowStageSelected, setRowStageSelected] = React.useState("");
 
   // const [selectedDropdownValue, setSelectedDropdownValue] =
   //   React.useState("New");
@@ -167,34 +173,47 @@ export default function CustomDatagrid({
   };
 
   const handleRowSelection = (name: string) => {
-    if (name === "Select All") {
+   
+    
+    if (name === "Select All" && leadsData) {
+      console.log("Selected Rows length", selectedRows.length);
+      console.log("rows length", leadsData.length)
+      console.log("select All:::::", selectedRows.length === leadsData.length);
       // If the name is "Select All", toggle all checkboxes
-      const allSelected = selectedRows.length === rows.length;
+      const allSelected = selectedRows.length === leadsData.length;
       if (allSelected) {
         setSelectedRows([]);
-        setIsRowSelected(false);
-        console.log(allSelected);
+      
       } else {
-        setSelectedRows(rows.map((row) => row.leadName));
-        setIsRowSelected(true);
+          setSelectedRows(leadsData?.map((row) => row.leadId));
+        // selectedPropsPass(isRowSelected = true);
       }
     } else {
       // If it's a regular row, toggle that row's checkbox
+
       const selectedIndex = selectedRows.indexOf(name);
       let newSelected: string[] = [];
 
       if (selectedIndex === -1) {
         newSelected = [...selectedRows, name];
+
       } else {
         newSelected = [
           ...selectedRows.slice(0, selectedIndex),
           ...selectedRows.slice(selectedIndex + 1),
         ];
+ 
       }
-
+      if (newSelected.length <= 0) {
+        selectedPropsPass(newSelected.length < 0);
+        setRowsPerPage(newSelected.length);
+      } else {
+        selectedPropsPass(newSelected.length > 0);
+        setRowsPerPage(newSelected.length);
+      }
+      selectedLeadProps(newSelected)
       setSelectedRows(newSelected);
-      setIsRowSelected(newSelected.length > 0);
-      console.log(newSelected.length);
+      // setIsRowSelected(newSelected.length > 0);
     }
   };
 
@@ -251,22 +270,6 @@ export default function CustomDatagrid({
   };
 
   // row selected action
-  const rowSelectedStage = (option: React.SetStateAction<string>) => {
-    setRowStageSelected(option);
-    setRowStageModal(true);
-  };
-
-  const rowStageModalClose = () => {
-    setRowStageModal(false);
-  };
-
-  //grid master search
-  const onLeadGridSearch = (leadName: string) => {
-    if (leadName.length >= 3) {
-      console.log(leadName);
-      leadNameSearch(leadName);
-    }
-  };
 
   // const handleChangePage = (event: unknown, newPage: number) => {
   //   setPage(newPage);
@@ -281,13 +284,13 @@ export default function CustomDatagrid({
       <div>
         <CustomTablePagination displayUI=" d-flex row-reverse" />
       </div>
-      <div>
+      {/* <div>
         <GridSearchExport
           isRowSelected={isRowSelected}
           rowSelectedStage={rowSelectedStage}
           leadNameSearch={onLeadGridSearch}
         />
-      </div>
+      </div> */}
       <div>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -306,7 +309,7 @@ export default function CustomDatagrid({
               >
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedRows.length === rowsPerPage}
+                    checked={(selectedRows.length === leadsData?.length)? true: false}
                     onChange={() => handleRowSelection("Select All")} // Pass "Select All" to indicate it's the header checkbox
                   />
                 </TableCell>
@@ -447,8 +450,8 @@ export default function CustomDatagrid({
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedRows.includes(lead.leadName)}
-                      onChange={() => handleRowSelection(lead.leadName)}
+                      checked={selectedRows.includes(lead.leadId)}
+                      onChange={() => handleRowSelection(lead.leadId)}
                     />
                   </TableCell>
 
@@ -548,193 +551,6 @@ export default function CustomDatagrid({
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       /> */}
-
-      {/* Dialog modal for stage and other model */}
-
-      <div>
-        <Dialog
-          open={rowStageModal}
-          onClose={rowStageModalClose}
-          maxWidth={"xs"}
-          sx={{ textAlign: "center" }}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          {rowStageSelected !== "Snooze" && rowStageSelected !== "Archive" ? (
-            <>
-              <DialogTitle id="alert-dialog-title">
-                {"Are you sure you want to Update "}
-
-                {rowStageSelected == "Won" || rowStageSelected == "Lost" ? (
-                  <>
-                    <span>{`Lead Stage as ${rowStageSelected} (`} </span>
-                    <span>
-                      <Tooltip
-                        title={rowStageSelected}
-                        arrow
-                        placement="right"
-                        key={rowStageSelected}
-                      >
-                        {rowStageSelected === "Won" ? (
-                          <WonIcon
-                            style={{
-                              width: "30px",
-                              height: "30px",
-                              fill: "#2ED47A",
-                              transform: "scale(1.5)",
-                              margin: " -4px 1px -8px -4px",
-                            }}
-                          />
-                        ) : (
-                          <LostIcon
-                            style={{
-                              width: "30px",
-                              height: "30px",
-                              fill: "#F7685B",
-                              transform: "scale(1.5)",
-                              margin: " -4px 1px -8px -4px",
-                            }}
-                          />
-                        )}
-                      </Tooltip>
-                    </span>
-                    <span>{`)`} </span>
-                  </>
-                ) : (
-                  <>
-                    <span>{"Lead Stage as"}</span>
-                    <Tooltip
-                      title={rowStageSelected}
-                      arrow
-                      placement="right"
-                      key={rowStageSelected}
-                    >
-                      <RibbonIcon
-                        style={{
-                          width: "30px",
-                          height: "15px",
-                          stroke: "#fff",
-                          strokeWidth: "0.5px",
-                          transform: "scale(1.5)",
-                          fill:
-                            rowStageSelected === "New"
-                              ? "#00ADD3"
-                              : rowStageSelected === "Connected"
-                              ? "#FFB946"
-                              : rowStageSelected === "Followed up"
-                              ? "#3CA2FF"
-                              : rowStageSelected === "Meeting Scheduled"
-                              ? "#885AF8"
-                              : rowStageSelected === "Estimate Sent"
-                              ? "#2ECAD4"
-                              : "#000000", // Default color
-                        }}
-                      />
-                    </Tooltip>
-                  </>
-                )}
-
-                {`for selected (${selectedRows.length})?`}
-              </DialogTitle>
-              <DialogContent></DialogContent>
-            </>
-          ) : (
-            <>
-              <DialogTitle id="alert-dialog-title" className="d-inline-block">
-                {selectedRows.length == 0 ? (
-                  <>
-                    {rowStageSelected === "Snooze" && (
-                      <span className="underline-on-hover">{`Snooze Lead`}</span>
-                    )}
-                    {rowStageSelected === "Archive" && (
-                      <span className="">{`Are you sure you want to Archive the Lead ?`}</span>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <span>{`Are you sure you want to ${rowStageSelected}`}</span>
-                    <span
-                      style={{
-                        color:
-                          rowStageSelected === "Snooze"
-                            ? "#109CF1"
-                            : rowStageSelected === "Archive"
-                            ? "#FF3C5F"
-                            : "inherit",
-                      }}
-                    >
-                      {` ${selectedRows.length} `}
-                    </span>
-                    <span>{`Leads ?`}</span>
-                  </>
-                )}
-              </DialogTitle>
-              <Divider />
-              <DialogContent>
-                {rowStageSelected === "Snooze" && (
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      className="my-2"
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          helperText: "",
-                          required: true,
-                        },
-                      }}
-                      label="Tentative start date"
-                    />
-                  </LocalizationProvider>
-                )}
-
-                <TextField
-                  label="Description"
-                  name="projectDescription"
-                  multiline
-                  rows={4}
-                  fullWidth
-                />
-                <FormHelperText style={{ color: "red" }}>
-                  Note: Maximum character limit is 250.
-                </FormHelperText>
-              </DialogContent>
-            </>
-          )}
-          <div>
-            <DialogActions
-              sx={{ justifyContent: "center", marginBottom: "20px" }}
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ width: "174px", height: "48px", background: "#109CF1" }}
-                onClick={rowStageModalClose}
-              >
-                {"No"}
-              </Button>
-              <Button
-                variant="outlined"
-                color={
-                  rowStageSelected === "Won" || rowStageSelected === "Lost"
-                    ? "primary"
-                    : "error"
-                }
-                sx={{
-                  width: "174px",
-                  height: "48px",
-                  color:
-                    rowStageSelected === "Won" || rowStageSelected === "Lost"
-                      ? "#109CF1"
-                      : "#FF3C5F",
-                }}
-                onClick={rowStageModalClose}
-              >
-                Yes
-              </Button>
-            </DialogActions>
-          </div>
-        </Dialog>
-      </div>
     </div>
   );
 }

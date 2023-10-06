@@ -1,3 +1,7 @@
+import ProjectEye from "@/assets/icons/project-eye";
+import SuccessTick from "@/assets/icons/success-tick";
+import UsersInfo from "@/assets/icons/users-info";
+
 export const filterData = [
     { project: '3D REndering', stage: 'New', source: 'Advertisement', assigned: "all" },
     { project: 'Architecture', stage: 'Followed up', source: 'referals', assigned: "today" },
@@ -111,3 +115,19 @@ export const dropdownOptions = [
 'Retailer',
 
   ]
+
+  export 
+  const steps = [
+    {
+      label: "Lead",
+      icon: <UsersInfo style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      label: "Project",
+      icon: <ProjectEye style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      label: "Success",
+      icon: <SuccessTick style={{ width: "30px", height: "30px" }} />,
+    },
+  ];

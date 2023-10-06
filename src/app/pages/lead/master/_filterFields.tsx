@@ -78,7 +78,7 @@ export default function FilterFields() {
     >
       <div className="container m-0">
         <div className="row">
-          <div className="col-lg-2 col-md-6 col-sm-12 pr-2">
+          {/* <div className="col-lg-2 col-md-6 col-sm-12 pr-2">
             <MultipleSelectDropdown
               label={"Project Type"}
               dataArr={leadStatus.map((status) => ({
@@ -86,7 +86,7 @@ export default function FilterFields() {
                 value: status.leadStatusValue,
               }))}
             />
-          </div>
+          </div> */}
           <div className=" col-lg-2 col-md-6 col-sm-12 pr-2">
             <MultipleSelectDropdown
               label={"Lead Stage"}

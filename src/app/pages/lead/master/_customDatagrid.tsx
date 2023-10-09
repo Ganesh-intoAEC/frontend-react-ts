@@ -124,7 +124,7 @@ interface CustomDatagridTypes {
   rowSelectedStage: (option: React.SetStateAction<string>) => void;
   selectedPropsPass: (option: boolean) => void;
 
-  selectedLeadProps:(option: React.SetStateAction<string[]>) => void;
+  selectedLeadProps: (option: React.SetStateAction<string[]>) => void;
 }
 
 export default function CustomDatagrid({
@@ -132,11 +132,11 @@ export default function CustomDatagrid({
   isRowSelected,
   rowSelectedStage,
   selectedPropsPass,
-  selectedLeadProps
+  selectedLeadProps,
 }: CustomDatagridTypes) {
   // const [page] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState<number | null>();
-  const { push } = useRouter();
+  const { push, query } = useRouter();
   const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
   const [orderBy, setOrderBy] = React.useState<Column | "">("");
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
@@ -173,19 +173,16 @@ export default function CustomDatagrid({
   };
 
   const handleRowSelection = (name: string) => {
-   
-    
     if (name === "Select All" && leadsData) {
       console.log("Selected Rows length", selectedRows.length);
-      console.log("rows length", leadsData.length)
+      console.log("rows length", leadsData.length);
       console.log("select All:::::", selectedRows.length === leadsData.length);
       // If the name is "Select All", toggle all checkboxes
       const allSelected = selectedRows.length === leadsData.length;
       if (allSelected) {
         setSelectedRows([]);
-      
       } else {
-          setSelectedRows(leadsData?.map((row) => row.leadId));
+        setSelectedRows(leadsData?.map((row) => row.leadId));
         // selectedPropsPass(isRowSelected = true);
       }
     } else {
@@ -196,13 +193,11 @@ export default function CustomDatagrid({
 
       if (selectedIndex === -1) {
         newSelected = [...selectedRows, name];
-
       } else {
         newSelected = [
           ...selectedRows.slice(0, selectedIndex),
           ...selectedRows.slice(selectedIndex + 1),
         ];
- 
       }
       if (newSelected.length <= 0) {
         selectedPropsPass(newSelected.length < 0);
@@ -211,8 +206,9 @@ export default function CustomDatagrid({
         selectedPropsPass(newSelected.length > 0);
         setRowsPerPage(newSelected.length);
       }
-      selectedLeadProps(newSelected)
+
       setSelectedRows(newSelected);
+      selectedLeadProps(newSelected);
       // setIsRowSelected(newSelected.length > 0);
     }
   };
@@ -309,7 +305,9 @@ export default function CustomDatagrid({
               >
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={(selectedRows.length === leadsData?.length)? true: false}
+                    checked={
+                      selectedRows.length === leadsData?.length ? true : false
+                    }
                     onChange={() => handleRowSelection("Select All")} // Pass "Select All" to indicate it's the header checkbox
                   />
                 </TableCell>
@@ -420,9 +418,9 @@ export default function CustomDatagrid({
                                           ? "#00ADD3"
                                           : option.value === "Connected"
                                           ? "#FFB946"
-                                          : option.value === "Followed up"
+                                          : option.value === "Followed-Up"
                                           ? "#3CA2FF"
-                                          : option.value === "Meeting Scheduled"
+                                          : option.value === "Scheduled Meeting"
                                           ? "#885AF8"
                                           : option.value === "Estimate Sent"
                                           ? "#2ECAD4"
@@ -488,9 +486,9 @@ export default function CustomDatagrid({
                                   ? "#00ADD3"
                                   : option.value === "Connected"
                                   ? "#FFB946"
-                                  : option.value === "Followed up"
+                                  : option.value === "Followed-Up"
                                   ? "#3CA2FF"
-                                  : option.value === "Meeting Scheduled"
+                                  : option.value === "Scheduled Meeting"
                                   ? "#885AF8"
                                   : option.value === "Estimate Sent"
                                   ? "#2ECAD4"

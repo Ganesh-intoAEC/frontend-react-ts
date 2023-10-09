@@ -9,63 +9,16 @@ import FilterIcon from "../../../../assets/icons/filter-icon";
 
 import CustomDateRangePicker from "@/app/components/CustomDateRangePicker";
 import useFetch from "use-http";
+import { useLeadStatus } from "@/app/hooks/useLeadStatus";
+import { useLeadSources } from "@/app/hooks/useLeadSources";
 
-export interface leadStatusesTypes {
-  leadStatusId: string;
-  leadStatusValue: string;
-}
-export interface leadSourcesTypes {
-  leadSourceId: string;
-  leadSourceSubCategory: string;
-}
+
 
 export default function FilterFields() {
-  const [leadStatus, setLeadStatus] = React.useState<Array<leadStatusesTypes>>(
-    []
-  );
-  const [leadSources, setLeadSources] = React.useState<Array<leadSourcesTypes>>(
-    []
-  );
-  const { post, response, error } = useFetch('/fetch');
 
-  React.useEffect(() => {
-    // Fetch data for lead statuses
-    fetchLeadStatusData().then(() => fetchLeadSourceData());
-
-    // Fetch data for lead sources
-  }, []);
-
-
-  const fetchLeadStatusData = async () => {
-    const requestData = {
-      eventType: "GET_LEAD_STATUSES",
-    };
-    await post(requestData);
-
-    if (response.ok) {
-      const res = await response.json();
-
-      setLeadStatus(res?.body || []);
-    } else {
-      // Handle error here
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const fetchLeadSourceData = async () => {
-    const requestData = {
-      eventType: "GET_LEAD_SOURCES",
-    };
-    await post(requestData);
-
-    if (response.ok) {
-      const res = await response.json();
-      setLeadSources(res?.body || []);
-    } else {
-      // Handle error here
-      console.error("Error fetching data:", error);
-    }
-  };
+  const { leadStatus } = useLeadStatus();
+ const { leadSources} = useLeadSources();
+ 
 
   return (
     <Box

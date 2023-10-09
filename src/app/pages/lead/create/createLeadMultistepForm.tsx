@@ -96,7 +96,7 @@ const CreateLeadForm: React.FC = () => {
     if (createResponse?.ok) {
       const res = await createResponse.json();
       push("/leads/master?isActive=true");
-      toast.success("Lead stage updated successfully", { autoClose: 2500 });
+      toast.success("Lead Added Successfully", { autoClose: 2500 });
       console.log(res?.body);
     } else {
       toast.error("An error occurred while creating the lead", {

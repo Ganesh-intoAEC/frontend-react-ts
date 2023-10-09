@@ -1,0 +1,1 @@
+export const emailVerifyTimeduration = 60

@@ -8,6 +8,7 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -22,10 +23,28 @@ import { MuiTelInput } from "mui-tel-input";
 import router from "next/router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import CarouselSignup from "./carousel";
+import { emailVerifyTimeduration } from "@/lib/constants";
+import moment from "moment";
+
+interface FormInputTypes {
+  error?: boolean;
+  value?: any;
+}
 
 const SignupCard: React.FC = () => {
   const isSmallScreen = useMediaQuery("(max-width: 990.95px)");
-
+  const [fullName, setFullname] = useState<FormInputTypes>({});
+  const [email, setEmail] = useState<FormInputTypes>({});
+  const [mobileNumber, setMobileNumber] = useState<FormInputTypes>({});
+  const [organizationName, setOrganizationName] = useState<FormInputTypes>({});
+  const [organizationType, setOrganizationType] = useState<FormInputTypes>({});
+  const [password, setPassword] = useState<FormInputTypes>({ value: "" });
+  const [confirmPassword, setConfirmPassword] = useState<FormInputTypes>({
+    value: "",
+  });
+  const [agreedTermsAndConditions, setAgreedtermsandConditions] =
+    useState<boolean>(false);
+  const [emailOTP, setEmailOtp] = useState<string>();
   //form Data
   const [formData, setFormData] = useState({
     fullName: "",
@@ -41,7 +60,7 @@ const SignupCard: React.FC = () => {
   //For Password
   const [showPassword, setShowPassword] = React.useState(false);
   const [showNewPassword, setShowNewPassword] = React.useState(false);
-  const [password, setPassword] = React.useState("");
+
   const [newPassword, setNewPassword] = React.useState("");
   const [passwordsMatch, setPasswordsMatch] = React.useState(true);
   const [invalidPassword, setInvalidPassword] = React.useState(false);
@@ -65,13 +84,12 @@ const SignupCard: React.FC = () => {
   const [signupBtnClicked, setSignupBtnClicked] = React.useState(false);
 
   // Timer duration (in seconds)
-  const timerDuration = 60;
 
   useEffect(() => {
     // This effect runs when showEmailOTPField changes
     if (showEmailOTPField) {
       // Start the timer when showEmailOTPField is true
-      setEmailTimer(timerDuration);
+      setEmailTimer(emailVerifyTimeduration);
       setVerifyEmailButtonText("Verify");
       // Create an interval to decrement the timer
       const interval = setInterval(() => {
@@ -105,7 +123,7 @@ const SignupCard: React.FC = () => {
   useEffect(() => {
     if (showMobileOTPField) {
       // Start the timer when showEmailOTPField is true
-      setMobileTimer(timerDuration);
+      setMobileTimer(emailVerifyTimeduration);
       setVerifyMobileButtonText("Verify");
       // Create an interval to decrement the timer
       const interval = setInterval(() => {
@@ -170,14 +188,31 @@ const SignupCard: React.FC = () => {
     }
   };
 
-  const checkLength = useMemo(
-    () => password.length >= 8 && password.length <= 16,
-    [password]
-  );
-  const checkUppercase = useMemo(() => /[A-Z]/.test(password), [password]);
-  const checkLowercase = useMemo(() => /[a-z]/.test(password), [password]);
-  const checkSymbol = useMemo(() => /\W|_/.test(password), [password]);
-  const checkNumber = useMemo(() => /[0-9]/.test(password), [password]);
+  const validLength = useMemo(() => {
+    const value = password.value.length >= 8 && password.value.length <= 16;
+    setPassword({ ...password, error: !value });
+    return value;
+  }, [password.value]);
+  const validUppercase = useMemo(() => {
+    const value = /[A-Z]/.test(password.value);
+    setPassword({ ...password, error: !value });
+    return value;
+  }, [password.value]);
+  const validLowerCase = useMemo(() => {
+    const value = /[a-z]/.test(password.value);
+    setPassword({ ...password, error: !value });
+    return value;
+  }, [password.value]);
+  const validSpecialCharacters = useMemo(() => {
+    const value = /\W|_/.test(password.value);
+    setPassword({ ...password, error: !value });
+    return value;
+  }, [password.value]);
+  const validNumber = useMemo(() => {
+    const value = /[0-9]/.test(password.value);
+    setPassword({ ...password, error: !value });
+    return value;
+  }, [password.value]);
 
   const handleClickShowPassword = useCallback(
     () => setShowPassword((show) => !show),
@@ -214,11 +249,11 @@ const SignupCard: React.FC = () => {
     setSignupBtnClicked(true);
     if (password === newPassword) {
       const isPasswordValid =
-        checkLength &&
-        checkUppercase &&
-        checkLowercase &&
-        checkSymbol &&
-        checkNumber;
+        validLength &&
+        validUppercase &&
+        validLowerCase &&
+        validSpecialCharacters &&
+        validNumber;
       if (isPasswordValid) {
         router.push("/signUp/registerSuccessful");
       } else {
@@ -236,6 +271,11 @@ const SignupCard: React.FC = () => {
       <div className="row ">
         <div className=" col-lg-6 col-md-12 col-sm-12  text-center">
           <Box
+            component={"form"}
+            onSubmit={(e) => {
+              e.preventDefault();
+              console.log(e);
+            }}
             className="mx-5 col-lg-10 bg-white rounded"
             sx={{
               display: "flex",
@@ -265,12 +305,22 @@ const SignupCard: React.FC = () => {
                   }
                   placeholder="Enter your Full Name"
                   name="fullName"
-                  value={formData.fullName}
-                  onChange={(e) => handleChange("fullName", e.target.value)}
+                  value={fullName?.value}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const pattern = /^[A-Za-z\s]+$/;
+                    const error = !pattern.test(value);
+                    setFullname({ error, value: value });
+                  }}
+                  onInvalid={(e) => {
+                    e.preventDefault();
+                    setFullname({ ...fullName, error: true });
+                  }}
                   InputLabelProps={{ shrink: true }}
+                  InputProps={{ required: true }}
                   fullWidth
                   helperText={
-                    signupBtnClicked && formData.fullName === "" ? (
+                    fullName?.error ? (
                       <span style={{ color: "red" }}>Enter a Full name</span>
                     ) : (
                       ""
@@ -286,12 +336,22 @@ const SignupCard: React.FC = () => {
                     </span>
                   }
                   placeholder="Enter your email"
-                  onChange={(e) => handleChange("email", e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const pattern =
+                      /^[\w-]+(\.[\w-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$/;
+                    const error = !pattern.test(value);
+                    setEmail({ error, value: value });
+                  }}
                   InputLabelProps={{ shrink: true }}
                   fullWidth
-                  value={formData.email}
+                  onInvalid={(e) => {
+                    e.preventDefault();
+                    setEmail({ ...email, error: true });
+                  }}
+                  value={email.value}
                   helperText={
-                    signupBtnClicked && formData.email === "" ? (
+                    email.error ? (
                       <span style={{ color: "red" }}>
                         Verify the Email address
                       </span>
@@ -300,6 +360,7 @@ const SignupCard: React.FC = () => {
                     )
                   }
                   InputProps={{
+                    required: true,
                     endAdornment: (
                       <Button
                         variant="contained"
@@ -317,13 +378,13 @@ const SignupCard: React.FC = () => {
                           },
                         }}
                         onClick={() => {
-                          if (!isEmailDisabled && !showEmailOTPField) {
+                          if (!showEmailOTPField) {
                             // Start the timer and show email OTP field
                             setShowEmailOTPField(true);
                           }
                         }}
                         // Disable the button if isDisabled is true or the timer is active
-                        disabled={isEmailDisabled || emailtimer !== null}
+                        disabled={email.error || emailtimer !== null}
                       >
                         {verifyEmailButtonText}
                       </Button>
@@ -336,7 +397,9 @@ const SignupCard: React.FC = () => {
                 ) : (
                   <p
                     style={{ color: "#F7685B" }}
-                  >{`Please enter verification code sent to your inbox. Your code will expire in 00:${emailtimer}`}</p>
+                  >{`Please enter verification code sent to your inbox. Your code will expire in ${moment(
+                    emailtimer
+                  ).format("mm:ss")}`}</p>
                 )}
               </Box>
               {showEmailOTPField && (
@@ -344,8 +407,14 @@ const SignupCard: React.FC = () => {
                   <TextField
                     placeholder="Enter your OTP  "
                     name="emailOTP"
+                    value={emailOTP}
                     InputLabelProps={{ shrink: true }}
-                    onChange={(e) => handleChange("emailOTP", e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value.length <= 6) {
+                        setEmailOtp(value);
+                      }
+                    }}
                     fullWidth
                     InputProps={{
                       endAdornment: (
@@ -362,7 +431,7 @@ const SignupCard: React.FC = () => {
                             }
                           }}
                           // Disable the button if isDisabled is true
-                          disabled={isEmailOTPDisabled}
+                          disabled={emailOTP?.length !== 6}
                         >
                           Submit
                         </Button>
@@ -381,12 +450,21 @@ const SignupCard: React.FC = () => {
                   name="mobileNumber"
                   fullWidth
                   defaultCountry="IN"
-                  value={formData.mobileNumber}
-                  onChange={(newPhone: string) =>
-                    handleChange("mobileNumber", newPhone)
-                  }
+                  value={mobileNumber.value}
+                  onInvalid={(e) => {
+                    e.preventDefault();
+                    setMobileNumber({ ...mobileNumber, error: true });
+                  }}
+                  onChange={(mobileNumber: string) => {
+                    const value = mobileNumber.replaceAll(" ", "");
+
+                    const pattern =
+                      /^(\+[0-9]{1,3}[-\s]?)?(\([0-9]{1,3}\)[-.\s]?)?([0-9]{1,4}[-.\s]?)?([0-9]{6,})$/;
+                    const error = !pattern.test(value);
+                    setMobileNumber({ error, value: value });
+                  }}
                   helperText={
-                    signupBtnClicked && formData.mobileNumber === "" ? (
+                    mobileNumber.error ? (
                       <span style={{ color: "red" }}>
                         Verify the Mobile number
                       </span>
@@ -396,6 +474,7 @@ const SignupCard: React.FC = () => {
                   }
                   MenuProps={{ disableScrollLock: true }}
                   InputProps={{
+                    required: true,
                     endAdornment: (
                       <Button
                         variant="contained"
@@ -413,13 +492,13 @@ const SignupCard: React.FC = () => {
                           },
                         }}
                         onClick={() => {
-                          if (!isMobileDisabled && !showMobileOTPField) {
+                          if (!showMobileOTPField) {
                             // Start the timer and show email OTP field
                             setShowMobileOTPField(true);
                           }
                         }}
                         // Disable the button if isDisabled is true or the timer is active
-                        disabled={isMobileDisabled || mobiletimer !== null}
+                        disabled={mobileNumber.error || mobiletimer !== null}
                       >
                         {verifyMobileButtonText}
                       </Button>
@@ -477,15 +556,20 @@ const SignupCard: React.FC = () => {
                         <span style={{ color: "red" }}>*</span>
                       </span>
                     }
+                    InputProps={{ required: true }}
                     placeholder="Enter your Organization name"
                     InputLabelProps={{ shrink: true }}
                     fullWidth
-                    value={formData.organizationName}
-                    onChange={(e) =>
-                      handleChange("organizationName", e.target.value)
-                    }
+                    value={organizationName.value}
+                    onInvalid={(e) => {
+                      e.preventDefault();
+                      setOrganizationName({ ...organizationName, error: true });
+                    }}
+                    onChange={(e) => {
+                      setOrganizationName({ value: e.target.value });
+                    }}
                     helperText={
-                      signupBtnClicked && formData.organizationName === "" ? (
+                      organizationName.error ? (
                         <span style={{ color: "red" }}>
                           Enter Organization name
                         </span>
@@ -509,15 +593,24 @@ const SignupCard: React.FC = () => {
                     sx={{ textAlign: "left" }}
                     placeholder="Select Organization type"
                     InputLabelProps={{ shrink: true }}
-                    value={formData.organizationType}
+                    InputProps={{ required: true }}
                     onChange={(e: { target: { value: string } }) =>
-                      handleChange("organizationType", e.target.value)
+                      setOrganizationType({
+                        ...organizationType,
+                        value: e.target.value,
+                        error: false,
+                      })
                     }
+                    value={organizationType.value}
+                    onInvalid={(e) => {
+                      e.preventDefault();
+                      setOrganizationType({ ...organizationType, error: true });
+                    }}
                     SelectProps={{
                       MenuProps: { disableScrollLock: true },
                     }}
                     helperText={
-                      signupBtnClicked && formData.organizationType === "" ? (
+                      organizationType.error ? (
                         <span style={{ color: "red" }}>
                           Select Organization type
                         </span>
@@ -549,6 +642,7 @@ const SignupCard: React.FC = () => {
                   </InputLabel>
                   <OutlinedInput
                     id="password"
+                    required={true}
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your Password"
                     onFocus={() => setShowpasswordRule(true)}
@@ -566,8 +660,16 @@ const SignupCard: React.FC = () => {
                       </InputAdornment>
                     }
                     label="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={password.value}
+                    onInvalid={(e) => {
+                      e.preventDefault();
+                      setShowpasswordRule(true);
+                      setPassword({ ...password, error: true });
+                    }}
+                    onChange={(e) => {
+                      const passwordValue = e.target.value;
+                      setPassword({ ...password, value: passwordValue });
+                    }}
                   />
                 </FormControl>
                 {showpasswordRule && (
@@ -578,7 +680,7 @@ const SignupCard: React.FC = () => {
                       </Typography>
                     </div>
                     <div className="d-flex justify-content-start align-items-center">
-                      {checkNumber ? (
+                      {validNumber ? (
                         <TickIcon style={TickIconStyle} />
                       ) : (
                         <CloseIcon style={closeIconStyle} />
@@ -586,7 +688,7 @@ const SignupCard: React.FC = () => {
                       <span className="ml-1 my-1">Numeral (0-9)</span>
                     </div>
                     <div className="d-flex justify-content-start align-items-center">
-                      {checkLowercase ? (
+                      {validLowerCase ? (
                         <TickIcon style={TickIconStyle} />
                       ) : (
                         <CloseIcon style={closeIconStyle} />
@@ -594,7 +696,7 @@ const SignupCard: React.FC = () => {
                       <span className="ml-1 my-1">Lower case letter (a-z)</span>
                     </div>
                     <div className="d-flex justify-content-start align-items-center">
-                      {checkUppercase ? (
+                      {validUppercase ? (
                         <TickIcon style={TickIconStyle} />
                       ) : (
                         <CloseIcon style={closeIconStyle} />
@@ -602,7 +704,7 @@ const SignupCard: React.FC = () => {
                       <span className="ml-1 my-1">Upper case letter (A-Z)</span>
                     </div>
                     <div className="d-flex justify-content-start align-items-center">
-                      {checkLength ? (
+                      {validLength ? (
                         <TickIcon style={TickIconStyle} />
                       ) : (
                         <CloseIcon style={closeIconStyle} />
@@ -612,7 +714,7 @@ const SignupCard: React.FC = () => {
                       </span>
                     </div>
                     <div className="d-flex justify-content-start align-items-center">
-                      {checkSymbol ? (
+                      {validSpecialCharacters ? (
                         <TickIcon style={TickIconStyle} />
                       ) : (
                         <CloseIcon style={closeIconStyle} />
@@ -637,8 +739,10 @@ const SignupCard: React.FC = () => {
                   </InputLabel>
                   <OutlinedInput
                     id="new-password"
+                    value={confirmPassword.value}
                     placeholder="Enter your Confirm Password"
                     type={showNewPassword ? "text" : "password"}
+                    required={true}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
@@ -651,9 +755,27 @@ const SignupCard: React.FC = () => {
                         </IconButton>
                       </InputAdornment>
                     }
-                    label="Password"
-                    onChange={(e) => setNewPassword(e.target.value)}
+                    label="Confirm Password"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const error = !(value === password.value);
+                      setConfirmPassword({
+                        error,
+                        value,
+                      });
+                    }}
+                    onInvalid={(e) => {
+                      e.preventDefault();
+                      setConfirmPassword({ ...confirmPassword, error: true });
+                    }}
                   />
+                  {confirmPassword.error && (
+                    <FormHelperText>
+                      <span style={{ color: "red" }}>
+                        Password does not match.
+                      </span>
+                    </FormHelperText>
+                  )}
                 </FormControl>
               </Box>
               <Box
@@ -676,9 +798,9 @@ const SignupCard: React.FC = () => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.agreeTermsAndCondition}
+                      checked={agreedTermsAndConditions}
                       onChange={(e) =>
-                        handleChange("agreeTermsAndCondition", e.target.checked)
+                        setAgreedtermsandConditions(e.target.checked)
                       }
                     />
                   }
@@ -709,7 +831,8 @@ const SignupCard: React.FC = () => {
                 )}
               <Box className="my-5">
                 <Button
-                  onClick={handleSignupClick}
+                  // onClick={handleSignupClick}
+                  type="submit"
                   sx={{
                     width: "160px",
                     height: "42px",

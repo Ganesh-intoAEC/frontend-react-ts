@@ -56,13 +56,13 @@ export const dropdownOptions = [
       color: "#FFB946",
     },
     {
-      value: "Followed up",
-      label: "Followed up",
+      value: "Followed-Up",
+      label: "Followed-Up",
       color: "#3CA2FF",
     },
     {
-      value: "Meeting Scheduled",
-      label: "Meeting Scheduled",
+      value: "Scheduled Meeting",
+      label: "Scheduled Meeting",
       color: "#885AF8",
     },
     {

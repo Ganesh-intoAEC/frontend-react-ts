@@ -45,6 +45,7 @@ const SignupCard: React.FC = () => {
   const [agreedTermsAndConditions, setAgreedtermsandConditions] =
     useState<boolean>(false);
   const [emailOTP, setEmailOtp] = useState<string>();
+  const [mobileOTP, setMobileOtp] = useState<string>();
   //form Data
   const [formData, setFormData] = useState({
     fullName: "",
@@ -384,7 +385,12 @@ const SignupCard: React.FC = () => {
                           }
                         }}
                         // Disable the button if isDisabled is true or the timer is active
-                        disabled={email.error || emailtimer !== null}
+                        disabled={
+                          email.error ||
+                          !email?.value ||
+                          email?.value?.length == 0 ||
+                          emailtimer !== null
+                        }
                       >
                         {verifyEmailButtonText}
                       </Button>
@@ -411,7 +417,7 @@ const SignupCard: React.FC = () => {
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (value.length <= 6) {
+                      if (value.match(/^\d{0,6}$/)) {
                         setEmailOtp(value);
                       }
                     }}
@@ -498,7 +504,12 @@ const SignupCard: React.FC = () => {
                           }
                         }}
                         // Disable the button if isDisabled is true or the timer is active
-                        disabled={mobileNumber.error || mobiletimer !== null}
+                        disabled={
+                          mobileNumber.error ||
+                          !mobileNumber?.value ||
+                          mobileNumber?.value?.length == 0 ||
+                          mobiletimer !== null
+                        }
                       >
                         {verifyMobileButtonText}
                       </Button>
@@ -519,9 +530,15 @@ const SignupCard: React.FC = () => {
                   <TextField
                     placeholder="Enter your OTP  "
                     name="mobileOTP"
-                    InputLabelProps={{ shrink: true }}
-                    onChange={(e) => handleChange("mobileOTP", e.target.value)}
                     fullWidth
+                    value={mobileOTP}
+                    InputLabelProps={{ shrink: true }}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value.match(/^\d{0,6}$/)) {
+                        setMobileOtp(value);
+                      }
+                    }}
                     InputProps={{
                       endAdornment: (
                         <Button
@@ -537,7 +554,7 @@ const SignupCard: React.FC = () => {
                             }
                           }}
                           // Disable the button if isDisabled is true
-                          disabled={isMobileOTPDisabled}
+                          disabled={mobileOTP?.length !== 6}
                         >
                           Submit
                         </Button>
